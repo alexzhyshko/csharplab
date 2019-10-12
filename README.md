@@ -6,11 +6,13 @@ Project has three separated projects, which are connected between each other by 
   2. RentalController.cs
 - Library.Domain: class library, .NET Standard Library, doesn't use any of the projects
   - Contains: 
-  1. Person.cs, 
-  2. Reader.cs, 
-  3. Author.cs, 
-  4. Admin.cs, 
-  5. Book.cs
+  ```
+  Person.cs, 
+  Reader.cs, 
+  Author.cs, 
+  Admin.cs, 
+  Book.cs
+  ```
 - Library.Model: emulator of DB model type, .NET Standard Library, uses ***Library.Domain***
   - Contains: 
   1. AdminModel.cs, 
