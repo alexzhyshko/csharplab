@@ -101,7 +101,13 @@ namespace Library
 
         public bool TryRemoveBook(Book book)
         {
-            return _books.TryRemove(book.Id) && _rental.TryRemove(book.Id);
+
+            if (!RentalModel.GetBookRentStatus(book.Id))
+            {
+                return _books.TryRemove(book.Id) && _rental.TryRemove(book.Id);
+            }
+            return false;
+            
         }
 
         public bool TryAddBook(Book book)

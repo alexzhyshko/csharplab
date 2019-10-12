@@ -11,6 +11,18 @@
     {
         private static RentalController rental;
 
+        private static ConsoleColor titleBackColor = ConsoleColor.Black;
+        private static ConsoleColor titleFontColor = ConsoleColor.Red;
+
+        private static ConsoleColor noticeBackColor = ConsoleColor.Green;
+        private static ConsoleColor noticeFontColor = ConsoleColor.Black;
+
+        private static ConsoleColor infoBackColor = ConsoleColor.Green;
+        private static ConsoleColor infoFontColor = ConsoleColor.Black;
+
+        private static ConsoleColor choiceBackColor = ConsoleColor.White;
+        private static ConsoleColor choiceFontColor = ConsoleColor.Black;
+
         public static void Main(string[] args)
         {
 
@@ -26,19 +38,31 @@
 
             rental = new RentalController(booksModel, rentalModel, readersModel, adminModel);
 
-            Author author1 = new Author(Guid.NewGuid(), "J.K.Rowling");
-
-            List<Author> authors1 = new List<Author>() { author1 };
-
-            Book book1 = new Book(Guid.NewGuid(), "Harry Potter", authors1);
-            Book book2 = new Book(Guid.NewGuid(), "Harry Potter", authors1);
-            Book book3 = new Book(Guid.NewGuid(), "Harry Potter", authors1);
-            Book book4 = new Book(Guid.NewGuid(), "Harry Potter", authors1);
+            Book book1 = new Book(Guid.NewGuid(), "The Lady From The Black Lagoon", new List<Author>() { new Author(Guid.NewGuid(), "Mallory O'Meara") });
+            Book book2 = new Book(Guid.NewGuid(), "My Friend Anna", new List<Author>() { new Author(Guid.NewGuid(), "Rachel Deloache Williams") });
+            Book book3 = new Book(Guid.NewGuid(), "The Spirit of Science Fiction ", new List<Author>() { new Author(Guid.NewGuid(), "Roberto Bolaño") });
+            Book book4 = new Book(Guid.NewGuid(), "The White Book", new List<Author>() { new Author(Guid.NewGuid(), "Han Kang") });
+            Book book5 = new Book(Guid.NewGuid(), "So Much Longing in So Little Space: The Art of Edvard Munch ", new List<Author>() { new Author(Guid.NewGuid(), "Karl Ove Knausgaard") });
+            Book book6 = new Book(Guid.NewGuid(), "King of Joy", new List<Author>() { new Author(Guid.NewGuid(), "Richard Chiem") });
+            Book book7 = new Book(Guid.NewGuid(), "The Bird King ", new List<Author>() { new Author(Guid.NewGuid(), "G. Willow Wilson") });
+            Book book8 = new Book(Guid.NewGuid(), "Exhalation: Stories", new List<Author>() { new Author(Guid.NewGuid(), "Ted Chiang") });
+            Book book9 = new Book(Guid.NewGuid(), "Bowlaway", new List<Author>() { new Author(Guid.NewGuid(), "Elizabeth McCracken") });
+            Book book10 = new Book(Guid.NewGuid(), "When You Read This", new List<Author>() { new Author(Guid.NewGuid(), "Mary Adkins") });
+            Book book11 = new Book(Guid.NewGuid(), "Mostly Dead Things", new List<Author>() { new Author(Guid.NewGuid(), "Kristen Arnett") });
+            Book book12 = new Book(Guid.NewGuid(), "Last Night In Nuuk", new List<Author>() { new Author(Guid.NewGuid(), "Niviaq Korneliussen") });
 
             rental.TryAddBook(book1);
             rental.TryAddBook(book2);
             rental.TryAddBook(book3);
             rental.TryAddBook(book4);
+            rental.TryAddBook(book5);
+            rental.TryAddBook(book6);
+            rental.TryAddBook(book7);
+            rental.TryAddBook(book8);
+            rental.TryAddBook(book9);
+            rental.TryAddBook(book10);
+            rental.TryAddBook(book11);
+            rental.TryAddBook(book12);
 
             while (true)
             {
@@ -50,42 +74,103 @@
         {
             Console.Clear();
             List<string> commands = new List<string>() { "Rent", "Return", "Add*", "Remove*", "Get reader*", "Register", "Exit" };
-            Console.WriteLine(">Select what you want to do(input number of choice)");
+            Console.BackgroundColor = noticeBackColor;
+            Console.ForegroundColor = noticeFontColor;
+            Console.WriteLine(">Select what you want to do");
+            Console.ResetColor();
+            int chosenCommandIndex = 0;
+            int index = 0;
             for (int i = 0; i < commands.Count; i++)
             {
+                if (index == chosenCommandIndex)
+                {
+                    Console.BackgroundColor = choiceBackColor;
+                    Console.ForegroundColor = choiceFontColor;
+                }
                 Console.WriteLine(">" + (i + 1) + ". " + commands[i]);
+                Console.ResetColor();
+                index++;
             }
+            Console.BackgroundColor = titleBackColor;
+            Console.ForegroundColor = titleFontColor;
             Console.WriteLine("(*-admin required)");
-            char input = GetInput();
+            Console.ResetColor();
+            while (true)
+            {
+                ConsoleKeyInfo keyInfo = Console.ReadKey();
+                ConsoleKey key = keyInfo.Key;
+                if (key == ConsoleKey.UpArrow)
+                {
+                    if (chosenCommandIndex > 0)
+                    {
+                        chosenCommandIndex--;
+                    }
+                }
+
+                if (key == ConsoleKey.DownArrow)
+                {
+                    if (chosenCommandIndex < commands.Count - 1)
+                    {
+                        chosenCommandIndex++;
+                    }
+                }
+
+                if (key == ConsoleKey.Enter)
+                {
+                    break;
+                }
+
+                Console.Clear();
+                Console.BackgroundColor = noticeBackColor;
+                Console.ForegroundColor = noticeFontColor;
+                Console.WriteLine(">Select what you want to do");
+                Console.ResetColor();
+                index = 0;
+                foreach (string command in commands)
+                {
+                    if (index == chosenCommandIndex)
+                    {
+                        Console.BackgroundColor = choiceBackColor;
+                        Console.ForegroundColor = choiceFontColor;
+                    }
+                    Console.WriteLine(">" + (index + 1) + ". " + command);
+                    Console.ResetColor();
+                    index++;
+                }
+                Console.BackgroundColor = titleBackColor;
+                Console.ForegroundColor = titleFontColor;
+                Console.WriteLine("(*-admin required)");
+                Console.ResetColor();
+
+            }
+
             Console.Clear();
             Console.WriteLine("Proceeding");
-            switch (input)
+            switch (chosenCommandIndex)
             {
-                case '1':
+                case 0:
                     ProceedToRent();
                     break;
-                case '2':
+                case 1:
                     ProceedToReturn();
                     break;
-                case '3':
+                case 2:
                     ProceedToAdd();
                     break;
-                case '4':
+                case 3:
                     ProceedToRemove();
                     break;
-                case '5':
+                case 4:
                     ProceedToGetReader();
                     break;
-                case '6':
+                case 5:
                     ProceedToRegister();
                     break;
-                case '7':
+                case 6:
                     Console.Clear();
                     Environment.Exit(0);
                     break;
-                case 'a':
 
-                    break;
             }
         }
 
@@ -117,7 +202,10 @@
             while (true)
             {
                 Console.Clear();
+                Console.BackgroundColor = titleBackColor;
+                Console.ForegroundColor = titleFontColor;
                 Console.WriteLine("----RENT BOOK----");
+                Console.ResetColor();
                 Console.WriteLine();
                 Console.WriteLine(">Type your username");
                 username = Console.ReadLine();
@@ -137,12 +225,17 @@
             while (true)
             {
                 Console.Clear();
+                Console.BackgroundColor = titleBackColor;
+                Console.ForegroundColor = titleFontColor;
                 Console.WriteLine("----RENT BOOK----");
-                Console.WriteLine();
-                Console.WriteLine("Alt+F - search books");
-                Console.WriteLine();
-                Console.WriteLine(">User: " + user.Name);
-                Console.WriteLine("(userid: " + user.Id + ")");
+                Console.ResetColor();
+                Console.BackgroundColor = noticeBackColor;
+                Console.ForegroundColor = noticeFontColor;
+                Console.WriteLine("Alt+F - search books" + "\n" + ">Select book using arrows");
+                Console.BackgroundColor = infoBackColor;
+                Console.ForegroundColor = infoFontColor;
+                Console.WriteLine(">User: " + user.Name+"\n"+ "(userid: " + user.Id + ")");
+                Console.ResetColor();
                 List<Book> books = rental.GetAllNonBookedBooks().GroupBy(book => book.Name).Select(g => g.First()).ToList();
                 Console.WriteLine(books.Count != 0 ? ">Available books: " : "No books available");
                 Book book = null;
@@ -150,24 +243,7 @@
                 string bookname = string.Empty;
                 if (books.Count != 0)
                 {
-                    int index = 0;
-                    foreach (Book b in books)
-                    {
-                        string text = index == chosenBookIndex ? ">>> " : "    ";
-                        text += b.Name + ", by ";
-                        foreach (Author a in b.Authors)
-                        {
-
-                            text += a.Name + ", ";
-
-                        }
-
-                        text = text.Substring(0, text.Length - 2);
-                        Console.WriteLine(text);
-                        index++;
-                    }
-
-                    Console.WriteLine(">Select book using arrows");
+                    OptimisedListRender(chosenBookIndex, books);
                     while (true)
                     {
                         ConsoleKeyInfo keyInfo = Console.ReadKey();
@@ -207,42 +283,35 @@
 
                         }
 
-                        index = 0;
+                        
                         Console.Clear();
+                        Console.BackgroundColor = titleBackColor;
+                        Console.ForegroundColor = titleFontColor;
                         Console.WriteLine("----RENT BOOK----");
-                        Console.WriteLine();
-                        Console.WriteLine("Alt+F - search books");
-                        Console.WriteLine();
-                        Console.WriteLine(">User: " + user.Name);
-                        Console.WriteLine("(userid: " + user.Id + ")");
+                        Console.BackgroundColor = noticeBackColor;
+                        Console.ForegroundColor = noticeFontColor;
+                        Console.WriteLine("Alt+F - search books" + "\n" + ">Select book using arrows");
+                        Console.BackgroundColor = infoBackColor;
+                        Console.ForegroundColor = infoFontColor;
+                        Console.WriteLine(">User: " + user.Name + "\n" + "(userid: " + user.Id + ")");
+                        Console.ResetColor();
                         Console.WriteLine(books.Count != 0 ? ">Available books: " : "No books available");
-                        foreach (Book b in books)
-                        {
-                            string text = index == chosenBookIndex ? ">>> " : "    ";
-                            text += b.Name + ", by ";
-                            foreach (Author a in b.Authors)
-                            {
-                                text += a.Name + ", ";
-                            }
+                        OptimisedListRender(chosenBookIndex, books);
 
-                            text = text.Substring(0, text.Length - 2);
-                            Console.WriteLine(text);
-                            index++;
-                        }
 
-                        Console.WriteLine(">Select book using arrows");
                     }
 
                     book = books[chosenBookIndex];
                     if (book != null)
                     {
                         Console.Clear();
+                        Console.BackgroundColor = titleBackColor;
+                        Console.ForegroundColor = titleFontColor;
                         Console.WriteLine("----RENT BOOK----");
-                        Console.WriteLine();
-                        Console.WriteLine(">User: " + user.Name);
-                        Console.WriteLine("(userid: " + user.Id + ")");
-                        Console.WriteLine(">Book: " + book.Name);
-                        Console.WriteLine("(bookid: " + book.Id + ")");
+                        Console.BackgroundColor = infoBackColor;
+                        Console.ForegroundColor = infoFontColor;
+                        Console.WriteLine(">User: " + user.Name+"\n"+ "(userid: " + user.Id + ")"+"\n"+ ">Book: " + book.Name+"\n"+ "(bookid: " + book.Id + ")");
+                        Console.ResetColor();
                         Console.WriteLine(rental.TryRentBook(book, user) ? "Rented successfully" : "Error, coludn't rent");
                         break;
                     }
@@ -272,13 +341,20 @@
         public static void ProceedToReturn()
         {
             Console.Clear();
+
+            Console.BackgroundColor = titleBackColor;
+            Console.ForegroundColor = titleFontColor;
             Console.WriteLine("----RETURN BOOK----");
+            Console.ResetColor();
 
             string username = string.Empty;
             while (true)
             {
                 Console.Clear();
+                Console.BackgroundColor = titleBackColor;
+                Console.ForegroundColor = titleFontColor;
                 Console.WriteLine("----RETURN BOOK----");
+                Console.ResetColor();
                 Console.WriteLine();
                 Console.WriteLine(">Type your username");
                 username = Console.ReadLine();
@@ -294,34 +370,22 @@
                 NoUserCase();
                 return;
             }
+
             int chosenBookIndex = 0;
             Console.Clear();
+            Console.BackgroundColor = titleBackColor;
+            Console.ForegroundColor = titleFontColor;
             Console.WriteLine("----RETURN BOOK----");
-            Console.WriteLine();
-            Console.WriteLine(">User: " + user.Name);
-            Console.WriteLine("(userid: " + user.Id + ")");
+            Console.BackgroundColor = infoBackColor;
+            Console.ForegroundColor = infoFontColor;
+            Console.WriteLine(">User: " + user.Name+"\n"+ "(userid: " + user.Id + ")");
+            Console.ResetColor();
             List<Book> books = rental.GetUserBooks(user);
-            Console.WriteLine(books.Count != 0 ? ">Your books: " : "You haven't rented any books yet");
+            Console.WriteLine(books.Count != 0 ? ">Your books: " : "You haven't rent any books yet");
             if (books.Count != 0)
             {
-                int index = 0;
-                foreach (Book book in books)
-                {
-                    string text = index == chosenBookIndex ? ">>> " : "    ";
-                    text += book.Name + ", by ";
-                    foreach (Author a in book.Authors)
-                    {
-
-                        text += a.Name + ", ";
-
-                    }
-
-                    text = text.Substring(0, text.Length - 2);
-                    Console.WriteLine(text);
-                    index++;
-                }
-
                 Console.WriteLine(">Select book using arrows ");
+                OptimisedListRender(chosenBookIndex, books);
                 Guid bookid = Guid.Empty;
                 while (true)
                 {
@@ -355,49 +419,40 @@
                         return;
                     }
 
-                    index = 0;
-
                     Console.Clear();
+                    Console.BackgroundColor = titleBackColor;
+                    Console.ForegroundColor = titleFontColor;
                     Console.WriteLine("----RETURN BOOK----");
-                    Console.WriteLine();
-                    Console.WriteLine(">User: " + user.Name);
-                    Console.WriteLine("(userid: " + user.Id + ")");
+                    Console.BackgroundColor = infoBackColor;
+                    Console.ForegroundColor = infoFontColor;
+                    Console.WriteLine(">User: " + user.Name+"\n"+ "(userid: " + user.Id + ")");
+                    Console.ResetColor();
                     Console.WriteLine(books.Count != 0 ? ">Available books: " : "No books available");
-                    foreach (Book book in books)
-                    {
-                        string text = index == chosenBookIndex ? ">>> " : "    ";
-                        text += book.Name + ", by ";
-                        foreach (Author a in book.Authors)
-                        {
-
-                            text += a.Name + ", ";
-
-                        }
-
-                        text = text.Substring(0, text.Length - 2);
-                        text += "(id: " + book.Id + ")";
-                        Console.WriteLine(text);
-                        index++;
-                    }
-                    Console.WriteLine(">Select book using arrows");
+                    Console.WriteLine(">Select book using arrows ");
+                    OptimisedListRender(chosenBookIndex, books);
 
                 }
 
+
+
                 bookid = books[chosenBookIndex].Id;
                 Console.Clear();
+                Console.BackgroundColor = titleBackColor;
+                Console.ForegroundColor = titleFontColor;
                 Console.WriteLine("----RETURN BOOK----");
-                Console.WriteLine();
-                Console.WriteLine(">User: " + user.Name);
-                Console.WriteLine("(userid: " + user.Id + ")");
+                Console.BackgroundColor = infoBackColor;
+                Console.ForegroundColor = infoFontColor;
+                Console.WriteLine(">User: " + user.Name+"\n"+ "(userid: " + user.Id + ")");
+                Console.ResetColor();
                 Book b = rental.TryGetBookById(bookid);
                 if (b == null)
                 {
                     Console.Clear();
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.Black;
                     Console.WriteLine("----RETURN BOOK----");
-                    Console.WriteLine();
-                    Console.WriteLine("No such book");
-                    Console.WriteLine();
-                    Console.WriteLine("Press any key to proceed...");
+                    Console.ResetColor();
+                    Console.WriteLine("\n"+ "No such book"+"\n" + "\n"+ "Press any key to proceed...");
                     while (true)
                     {
                         if (Console.ReadKey() != null)
@@ -409,8 +464,10 @@
                     return;
                 }
 
-                Console.WriteLine(">Book: " + b.Name);
-                Console.WriteLine("(bookid: " + b.Id + ")");
+                Console.BackgroundColor = infoBackColor;
+                Console.ForegroundColor = infoFontColor;
+                Console.WriteLine(">Book: " + b.Name+"\n"+ "(bookid: " + b.Id + ")");
+                Console.ResetColor();
                 Console.WriteLine(rental.TryReturnBook(b, user) ? "Returned successfully" : "Error, coludn't return");
             }
 
@@ -426,16 +483,12 @@
         }
 
         public static void ProceedToAdd()
-        {
-            Console.Clear();
-            Console.WriteLine("----ADD BOOK----");
+        { 
             string username;
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("----ADD BOOK----");
-                Console.WriteLine();
-                Console.WriteLine(">Type your username");
+                Console.WriteLine("----ADD BOOK----"+"\n"+"\n"+ ">Type your username");
                 username = Console.ReadLine();
                 if (!username.Trim().Equals(string.Empty))
                 {
@@ -455,8 +508,7 @@
                 Console.Clear();
                 Console.WriteLine("----ADD BOOK----");
                 Console.WriteLine();
-                Console.WriteLine("Hi, Admin " + user.Name + ", id: " + user.Id);
-                Console.WriteLine(">Input book name: ");
+                Console.WriteLine("Hi, Admin " + user.Name + ", id: " + user.Id+"\n"+">Input book name: ");
                 string bookname = Console.ReadLine();
                 Console.WriteLine("OK, now input authors delimited by coma");
                 string astr = Console.ReadLine();
@@ -473,8 +525,7 @@
                 Console.WriteLine("Admin rights required for this operation");
             }
 
-            Console.WriteLine();
-            Console.WriteLine("Press any key to proceed to menu...");
+            Console.WriteLine("\n"+"Press any key to proceed to menu...");
             while (true)
             {
                 if (Console.ReadKey() != null)
@@ -491,10 +542,7 @@
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("----REMOVE BOOK----");
-
-                Console.WriteLine();
-                Console.WriteLine(">Type your username");
+                Console.WriteLine("----REMOVE BOOK----"+"\n" + "\n"+ ">Type your username");
                 username = Console.ReadLine();
                 if (!username.Trim().Equals(string.Empty))
                 {
@@ -513,10 +561,7 @@
             {
 
                 Console.Clear();
-                Console.WriteLine("----REMOVE BOOK----");
-                Console.WriteLine();
-                Console.WriteLine("Hi, Admin " + user.Name + ", id: " + user.Id);
-
+                Console.WriteLine("----REMOVE BOOK----"+"\n" + "\n"+ "Hi, Admin " + user.Name + ", id: " + user.Id);
                 List<Book> books = rental.GetAllBooks();
                 Console.WriteLine(books.Count != 0 ? ">Available books: " : "No books available");
                 if (books.Count != 0)
@@ -542,11 +587,7 @@
                     if (book == null)
                     {
                         Console.Clear();
-                        Console.WriteLine("----RETURN BOOK----");
-                        Console.WriteLine();
-                        Console.WriteLine("No such book");
-                        Console.WriteLine();
-                        Console.WriteLine("Press any key to proceed...");
+                        Console.WriteLine("----RETURN BOOK----"+"\n" + "\n"+ "No such book" + "\n" + "\n" + "Press any key to proceed...");
                         while (true)
                         {
                             if (Console.ReadKey() != null)
@@ -558,7 +599,7 @@
                         return;
                     }
 
-                    Console.WriteLine(rental.TryRemoveBook(book) ? "OK, removed " + book.Name + "(id: " + book.Id + ")" : "Book don't exist");
+                    Console.WriteLine(rental.TryRemoveBook(book) ? "OK, removed " + book.Name + "(id: " + book.Id + ")" : "Can't remove book");
                 }
             }
             else
@@ -566,8 +607,7 @@
                 Console.WriteLine("Admin rights required for this operation");
             }
 
-            Console.WriteLine();
-            Console.WriteLine("Press any key to proceed to menu...");
+            Console.WriteLine("\n"+"Press any key to proceed to menu...");
             while (true)
             {
                 if (Console.ReadKey() != null)
@@ -584,10 +624,7 @@
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("----GET READER OF BOOK----");
-
-                Console.WriteLine();
-                Console.WriteLine(">Type your username");
+                Console.WriteLine("----GET READER OF BOOK----"+"\n" + "\n"+ ">Type your username");
                 username = Console.ReadLine();
                 if (!username.Trim().Equals(string.Empty))
                 {
@@ -605,9 +642,7 @@
             if (rental.CheckRights(user))
             {
                 Console.Clear();
-                Console.WriteLine("----GET READER OF BOOK----");
-                Console.WriteLine();
-                Console.WriteLine("Hi, Admin " + user.Name + ", id: " + user.Id);
+                Console.WriteLine("----GET READER OF BOOK----"+"\n" + "\n"+ "Hi, Admin " + user.Name + ", id: " + user.Id);
                 Dictionary<Book, Reader> result = rental.GetRentBooks();
                 Console.WriteLine(result.Count != 0 ? "Rent books: " : "No rent books");
                 if (result.Count != 0)
@@ -623,11 +658,7 @@
                     if (b == null)
                     {
                         Console.Clear();
-                        Console.WriteLine("----RETURN BOOK----");
-                        Console.WriteLine();
-                        Console.WriteLine("No such book");
-                        Console.WriteLine();
-                        Console.WriteLine("Press any key to proceed...");
+                        Console.WriteLine("----RETURN BOOK----"+"\n" + "\n"+ "No such book" + "\n" + "\n" + "Press any key to proceed...");
                         while (true)
                         {
                             if (Console.ReadKey() != null)
@@ -640,16 +671,15 @@
                     }
 
                     Reader reader = rental.TryGetReader(b);
-                    Console.WriteLine("_________");
-                    Console.WriteLine("Reader of " + b.Name + "(id: " + b.Id + ") is " + reader.Name + "(id: " + reader.Id + ")");
+                    Console.WriteLine("_________"+"\n"+ "Reader of " + b.Name + "(id: " + b.Id + ") is " + reader.Name + "(id: " + reader.Id + ")");
                 }
             }
             else
             {
                 Console.WriteLine("Admin rights required for this operation");
             }
-            Console.WriteLine();
-            Console.WriteLine("Press any key to proceed to menu...");
+
+            Console.WriteLine("\n"+"Press any key to proceed to menu...");
             while (true)
             {
                 if (Console.ReadKey() != null)
@@ -662,24 +692,19 @@
         public static void ProceedToRegister()
         {
             Console.Clear();
-            Console.WriteLine("----REGISTER----");
-            Console.WriteLine();
-            Console.WriteLine("Type username: ");
+            Console.WriteLine("----REGISTER----"+"\n" + "\n"+ "Type username: ");
             string username = Console.ReadLine();
             Console.Clear();
-            Console.WriteLine("----REGISTER----");
-            Console.WriteLine();
+            Console.WriteLine("----REGISTER----" + "\n");
             Guid newId = Guid.NewGuid();
             bool result = rental.TryRegisterUser(new Reader(newId, username));
             if (result)
             {
-                Console.WriteLine("Ok, your username will be: " + username);
-                Console.WriteLine("(id: " + newId + ")");
+                Console.WriteLine("Ok, your username will be: " + username+"\n"+ "(id: " + newId + ")");
             }
             Console.WriteLine(result ? "Successfully registered" : "Problem registering, maybe user exists");
 
-            Console.WriteLine();
-            Console.WriteLine("Press any key to proceed to menu...");
+            Console.WriteLine("\n"+"Press any key to proceed to menu...");
             while (true)
             {
                 if (Console.ReadKey() != null)
@@ -694,9 +719,13 @@
 
             Book res = null;
             Console.Clear();
+            Console.BackgroundColor = titleBackColor;
+            Console.ForegroundColor = titleFontColor;
             Console.WriteLine("----FIND BOOK----");
-            Console.WriteLine();
-            Console.WriteLine("Input book title");
+            Console.BackgroundColor = noticeBackColor;
+            Console.ForegroundColor = noticeFontColor;
+            Console.WriteLine("Input word to search for: ");
+            Console.ResetColor();
             if (Console.KeyAvailable)
             {
                 if (Console.ReadKey().Key == ConsoleKey.Escape)
@@ -728,21 +757,7 @@
 
             int index = 0;
             int selectedIndex = 0;
-            foreach (Book book in foundBooks)
-            {
-                string text = index == selectedIndex ? ">>> " : "    ";
-                text += book.Name + ", by ";
-                foreach (Author a in book.Authors)
-                {
-
-                    text += a.Name + ", ";
-
-                }
-
-                text = text.Substring(0, text.Length - 2);
-                Console.WriteLine(text);
-                index++;
-            }
+            OptimisedListRender(selectedIndex, foundBooks);
 
             while (true)
             {
@@ -776,40 +791,32 @@
 
                 index = 0;
                 Console.Clear();
+                Console.Clear();
+                Console.BackgroundColor = titleBackColor;
+                Console.ForegroundColor = titleFontColor;
                 Console.WriteLine("----FIND BOOK----");
-                Console.WriteLine();
-                Console.WriteLine(foundBooks.Count != 0 ? ">Available books: " : "No books available");
-                foreach (Book b in foundBooks)
-                {
-                    string text = index == selectedIndex ? ">>> " : "    ";
-                    text += b.Name + ", by ";
-                    foreach (Author a in b.Authors)
-                    {
-                        text += a.Name + ", ";
-                    }
-
-                    text = text.Substring(0, text.Length - 2);
-                    Console.WriteLine(text);
-                    index++;
-                }
-
+                Console.BackgroundColor = noticeBackColor;
+                Console.ForegroundColor = noticeFontColor;
                 Console.WriteLine(">Select book using arrows");
+                Console.ResetColor();
+                Console.WriteLine(foundBooks.Count != 0 ? ">Available books: " : "No books available");
+                OptimisedListRender(selectedIndex, foundBooks);
             }
 
             res = foundBooks[selectedIndex];
             if (res != null)
             {
                 Console.Clear();
-                Console.WriteLine("----RENT BOOK----");
-                Console.WriteLine();
-                Console.WriteLine(">User: " + user.Name);
-                Console.WriteLine("(userid: " + user.Id + ")");
-                Console.WriteLine(">Book: " + res.Name);
-                Console.WriteLine("(bookid: " + res.Id + ")");
+                Console.Clear();
+                Console.BackgroundColor = titleBackColor;
+                Console.ForegroundColor = titleFontColor;
+                Console.WriteLine("----FIND BOOK----");
+                Console.BackgroundColor = infoBackColor;
+                Console.ForegroundColor = infoFontColor;
+                Console.WriteLine(">User: " + user.Name+"\n"+ "(userid: " + user.Id + ")"+"\n"+ ">Book: " + res.Name+"\n"+ "(bookid: " + res.Id + ")");
+                Console.ResetColor();
                 Console.WriteLine(rental.TryRentBook(res, user) ? "Rented successfully" : "Error, coludn't rent");
-
-                Console.WriteLine();
-                Console.WriteLine("Press any key to proceed...");
+                Console.WriteLine("\n"+"Press any key to proceed...");
                 while (true)
                 {
                     if (Console.ReadKey() != null)
@@ -830,9 +837,7 @@
         private static void NoUserCase()
         {
             Console.Clear();
-            Console.WriteLine("No such user, please register");
-            Console.WriteLine();
-            Console.WriteLine("Press any key to proceed to menu...");
+            Console.WriteLine("No such user, please register"+"\n" + "\n" + "Press any key to proceed to menu...");
             while (true)
             {
                 if (Console.ReadKey() != null)
@@ -841,5 +846,59 @@
                 }
             }
         }
+
+        private static void OptimisedListRender(int pos, List<Book> list)
+        {
+            string output = string.Empty;
+            int index = 0;
+            while (index < pos)
+            {
+                output += list[index].Name + ", by ";
+                foreach (Author author in list[index].Authors)
+                {
+                    output += author.Name + ", ";
+                }
+
+                output = output.Substring(0, output.Length - 2);
+                output += "\n";
+                index++;
+            }
+            Console.Write(output);
+            Console.BackgroundColor = choiceBackColor;
+            Console.ForegroundColor = choiceFontColor;
+            output = string.Empty;
+            output += list[pos].Name + ", by ";
+            foreach (Author author in list[pos].Authors)
+            {
+                output += author.Name + ", ";
+            }
+
+            output = output.Substring(0, output.Length - 2);
+            Console.WriteLine(output);
+            Console.ResetColor();
+            output = string.Empty;
+            index = pos + 1;
+            while (index > pos && index < list.Count)
+            {
+                output += list[index].Name + ", by ";
+                foreach (Author author in list[index].Authors)
+                {
+                    output += author.Name + ", ";
+                }
+
+                output = output.Substring(0, output.Length - 2);
+                output += "\n";
+                if (index == list.Count - 1)
+                {
+                    break;
+                }
+
+                index++;
+            }
+
+            Console.Write(output);
+        }
+
+        
     }
 }
