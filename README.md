@@ -18,7 +18,7 @@ Solution has three separated projects, which are connected between each other by
   RentalModel.cs
   ```
 ------
-- Library.Domain: class library, **`.NET Standard Library`**, * *doesn't use any of the projects* *
+- Library.Domain: class library, **`.NET Standard Library`**, *doesn't use any of the projects*
   #### Contains: 
   ```
   Person.cs
