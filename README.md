@@ -1,7 +1,7 @@
 # C# labs repos
 Solution has three separated projects, which are connected between each other by adding dependencies. 
-- Library: main project, **`.NET Core 3.0`**, uses `Library.Domain` and `Library.Model`
 ------
+- Library: main project, **`.NET Core 3.0`**, uses `Library.Domain` and `Library.Model`
   #### Contains: 
   ```
   Program.cs
@@ -17,6 +17,7 @@ Solution has three separated projects, which are connected between each other by
   ReaderModel.cs
   RentalModel.cs
   ```
+------
 - Library.Domain: class library, **`.NET Standard Library`**, * *doesn't use any of the projects* *
   #### Contains: 
   ```
@@ -26,3 +27,4 @@ Solution has three separated projects, which are connected between each other by
   Admin.cs
   Book.cs
   ```
+------
