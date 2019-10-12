@@ -1,7 +1,7 @@
 # C# labs repos
 
 
-Console Application based on **`.NET Core 3.0`**
+Console Application based on **`.NET Core 3.0`**.
 Solution has three separated projects, which are connected between each other by adding dependencies.
 
 
