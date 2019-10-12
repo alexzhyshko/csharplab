@@ -175,6 +175,11 @@ namespace Library
             return res;
         }
 
+        public List<Book> FindBooks(string input)
+        {
+            return _books.Find(input);
+        }
+
         private bool CheckParams(Book book, Reader reader)
         {
             return _rental.BookExists(book)&& _readers.ReaderExists(reader);

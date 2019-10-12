@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Library.Domain;
 
 namespace Library.Model
@@ -13,6 +12,19 @@ namespace Library.Model
         {
             
         }
+
+
+        public List<Admin> TryGetAll()
+        {
+            List<Admin> res = new List<Admin>();
+            foreach (Admin adm in _admins)
+            {
+                res.Add(new Admin(adm.Id, adm.Name));
+            }
+            return res;
+
+        }
+
 
         public bool TryAdd(Admin newAdmin)
         {
@@ -38,7 +50,7 @@ namespace Library.Model
         {
             foreach (Admin admin in _admins)
             {
-                if (admin.id.Equals(reader.id))
+                if (admin.Id.Equals(reader.Id))
                 {
                     return true;
                 }

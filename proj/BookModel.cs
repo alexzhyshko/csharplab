@@ -5,31 +5,34 @@ using Library.Domain;
 
 namespace Library.Model
 {
-    public class BooksModel
+    public class BookModel
     {
         
         private Dictionary<Guid, Book> _books = new Dictionary<Guid, Book>();
 
-        public BooksModel()
+        public BookModel()
         {
 
         }
 
-        public List<Book> TryGetAll()
+      
+        public List<Book> Find(string text)
         {
-            List<Book> result = new List<Book>();
-            foreach (Guid id in _books.Keys)
+            List<Book> res = new List<Book>();
+            foreach (Book book in _books.Values)
             {
-                result.Add(TryGet(id));
+                if (book.Name.ToLower().Contains(text.ToLower()))
+                {
+                    res.Add(book);
+                }
             }
-            return result;
+            return res;
         }
-
         public Book TryPickByName(string name)
         {
             foreach (Book book in _books.Values)
             {
-                if (book.name.Equals(name)&&!RentalModel.GetBookRentStatus(book.id))
+                if (book.Name.Equals(name)&&!RentalModel.GetBookRentStatus(book.Id))
                 {
                     return book;
                 }
@@ -39,12 +42,12 @@ namespace Library.Model
 
         public bool TryAdd(Book book)
         {
-            if (_books.ContainsKey(book.id))
+            if (_books.ContainsKey(book.Id))
             {
                 return false;
             }
             long startSize = _books.Count;
-            _books.Add(book.id, book);
+            _books.Add(book.Id, book);
             return startSize != _books.Count;
 
         }
@@ -66,6 +69,18 @@ namespace Library.Model
                 return null;
             }
             return _books[id];
+        }
+        
+
+        public List<Book> TryGetAll()
+        {
+            List<Book> res = new List<Book>();
+            foreach (Book book in _books.Values)
+            {
+                res.Add(new Book(book.Id, book.Name, book.Authors));
+            }
+            return res;
+           
         }
     }
 }

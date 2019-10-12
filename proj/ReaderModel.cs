@@ -5,20 +5,19 @@ using Library.Domain;
 
 namespace Library.Model
 {
-    public class ReadersModel
+    public class ReaderModel
     {
         private Dictionary<Guid, Reader> _readers = new Dictionary<Guid, Reader>();
 
-        public ReadersModel()
+        public ReaderModel()
         {
 
         }
 
         public bool ReaderExists(Reader reader)
         {
-            return _readers.ContainsKey(reader.id);
+            return _readers.ContainsKey(reader.Id);
         }
-
 
         public List<Reader> TryGetAll()
         {
@@ -26,7 +25,7 @@ namespace Library.Model
             List<Reader> result = new List<Reader>();
             foreach (Reader reader in _readers.Values)
             {
-                result.Add(reader);
+                result.Add(new Reader(reader.Id, reader.Name));
             }
             return result;
         }
@@ -36,7 +35,7 @@ namespace Library.Model
         {
             foreach (Reader reader in _readers.Values)
             {
-                if (reader.name.Equals(name))
+                if (reader.Name.Equals(name))
                 {
                     return reader;
                 }
@@ -47,12 +46,19 @@ namespace Library.Model
 
         public bool TryAdd(Reader reader)
         {
-            if (_readers.ContainsKey(reader.id))
+            if (_readers.ContainsKey(reader.Id))
             {
                 return false;
             }
+            foreach (Reader r in _readers.Values)
+            {
+                if (r.Name.ToLower().Equals(reader.Name.ToLower()))
+                {
+                    return false;
+                }
+            }
             long startCount = _readers.Count;
-            _readers.Add(reader.id, reader);
+            _readers.Add(reader.Id, reader);
             return startCount != _readers.Count;
         }
 

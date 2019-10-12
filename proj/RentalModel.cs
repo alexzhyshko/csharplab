@@ -20,7 +20,7 @@ namespace Library.Model
 
         public bool BookExists(Book book)
         {
-            return _rental.ContainsKey(book.id);
+            return _rental.ContainsKey(book.Id);
         }
 
 
@@ -62,7 +62,8 @@ namespace Library.Model
             {
                 return false;
             }
-            _rental.Add(bookid, readerid);
+
+            _rental[bookid] = readerid;
             return _rental[bookid] != startVal;
         }
 
@@ -82,7 +83,7 @@ namespace Library.Model
 
             foreach (Guid guid in _rental.Keys)
             {
-                if (_rental[guid].Equals(reader.id))
+                if (_rental[guid].Equals(reader.Id))
                 {
                     res.Add(guid);
 
@@ -94,204 +95,26 @@ namespace Library.Model
         public Dictionary<Guid, Guid> GetRentBooks()
         {
             Dictionary <Guid, Guid> res= new Dictionary<Guid, Guid>();
-            foreach (Guid id in _rental.Keys)
+            foreach (Guid Id in _rental.Keys)
             {
-                if (!_rental[id].Equals(Guid.Empty))
+                if (!_rental[Id].Equals(Guid.Empty))
                 {
-                    res.Add(id, _rental[id]);
+                    res.Add(Id, _rental[Id]);
 
                 }
             }
             return res;
         }
-        
-       
-
-        //public void AddAdmin(Reader reader)
-        //{
-
-            
-        //    //_admins.Add(reader);
-        //}
-
-        //public bool TryAddBook(Book book)
-        //{
-
-           
-
-        //     if (!_rental.ContainsKey(book.id))
-        //    {
-        //        _rental.Add(book.id, Guid.Empty);
-        //        _books.Add(book.id, book);
-        //        return true;
-        //    }
-        //    return false;
-             
-
-        //}
-
-        //public bool TryRentBook(Book book, Reader user)
-        //{
 
 
-             
-        //    if (_rental.ContainsKey(book.id))
-        //    {
-        //        if (_rental[book.id].Equals(Guid.Empty))
-        //        {
-        //           _rental[book.id] = user.id;
-        //            if (!_readers.ContainsKey(user.id))
-        //            {
-        //                _readers.Add(user.id, user);
-        //            }
-        //            return true;
-        //        }
-        //        return false;
-        //    }
-        //    return false;
-             
-        //}
-
-        //public bool TryRemoveReader(Book book)
-        //{
-
-
-             
-        //    if (_rental.ContainsKey(book.id))
-        //    {
-        //        if (!_rental[book.id].Equals(Guid.Empty))
-        //        {
-        //            _rental[book.id] = Guid.Empty;
-        //            return true;
-        //        }
-        //        return false;
-        //    }
-        //    return false;
-             
-        //}
-
-        //public bool TryRemoveBook(Book book)
-        //{
-
-             
-        //    if (_rental.ContainsKey(book.id))
-        //    {
-        //        if (_rental[book.id].Equals(Guid.Empty))
-        //        {
-        //            _rental.Remove(book.id);
-        //            _books.Remove(book.id);
-        //            return true;
-        //        }
-        //        return false;
-        //    }
-        //    return false;
-             
-        //}
-
-        //public Reader TryGetReader(Book book)
-        //{
-             
-        //    if (_rental.ContainsKey(book.id))
-        //    {
-        //        return _readers[_rental[book.id]];
-        //    }
-        //    return null;
-             
-        //}
-
-        //public Book PickBookByName(string bookName)
-        //{
-             
-        //    foreach (Guid id in _books.Keys)
-        //    {
-        //        if (_books[id].name.Trim().Equals(bookName))
-        //        {
-        //            Guid bookid = id;
-        //            if (_rental[bookid].Equals(Guid.Empty))
-        //            {
-        //                return _books[bookid];
-        //            }
-        //        }
-        //    }
-        //    return null;
-             
-        //}
-        //public Reader PickUserByName(string username)
-        //{
-             
-        //    Reader result = null;
-        //    foreach (Reader reader in _readers.Values)
-        //    {
-        //        if (reader.name.Trim().Equals(username.Trim()))
-        //        {
-        //            result = reader;
-        //        }
-        //    }
-        //    if (result==null)
-        //    {
-        //        result = new Reader(Guid.NewGuid(), username);
-        //        _readers.Add(result.id, result);
-        //    }
-
-        //    return result;
-             
-        //}
-
-        //public List<Book> GetAllBooks()
-        //{
-             
-        //    List<Book> result = new List<Book>();
-        //    foreach (Guid id in _books.Keys)
-        //    {
-  
-        //            if (_rental[id].Equals(Guid.Empty))
-        //            {
-        //                result.Add(_books[id]);
-        //            } 
-        //    }
-        //    return result;
-             
-        //}
-
-        //public List<Book> GetUserBooks(Reader reader)
-        //{
-             
-        //    List<Book> result = new List<Book>();
-        //    foreach (Guid id in _rental.Keys)
-        //    {
-        //        if (_rental[id].Equals(reader.id))
-        //        {
-        //            result.Add(_books[id]);
-        //        }
-        //    }
-        //    return result;
-             
-        //}
-
-        //public Book GetBookById(Guid id)
-        //{
-
-
-        //    return _books[id];
-        //}
-        //public Dictionary<Book, Reader> GetRentBooks()
-        //{
-
-             
-        //    Dictionary<Book, Reader> result = new Dictionary<Book, Reader>();
-        //    foreach (Guid id in _books.Keys)
-        //    {
-
-        //        if (!_rental[id].Equals(Guid.Empty))
-        //        {
-        //            result.Add(_books[id], _readers[_rental[id]]);
-        //        }
-        //    }
-        //    return result;
-             
-        //}
-     
-
-
+        public Dictionary<Guid, Guid> TryGetAll()
+        {
+            Dictionary<Guid, Guid> res = new Dictionary<Guid, Guid>();
+            foreach (Guid key in _rental.Keys)
+            {
+                res.Add(key, _rental[key]);
+            }
+            return res;
+        }
     }
 }
