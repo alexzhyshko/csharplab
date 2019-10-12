@@ -1,9 +1,9 @@
 # C# labs repos
-[Solution](/proj/Program.cs) has three separated projects, which are connected between each other by adding dependencies. 
+Solution has three separated projects, which are connected between each other by adding dependencies. 
 - Library: main project, **`.NET Core 3.0`**, uses `Library.Domain` and `Library.Model`
   Contains: 
   ```
-  [Program.cs](../proj/Program.cs)
+  Program.cs
   RentalController.cs
   ```
 - Library.Model: emulator of DB model type, **`.NET Standard Library`**, uses `Library.Domain`
