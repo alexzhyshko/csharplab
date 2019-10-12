@@ -1,5 +1,6 @@
 # CSharp labs repos
 Solution has three separated projects, which are connected between each other by adding dependencies.
+------
 - Library: main project, **`.NET Core 3.0`**, uses `Library.Domain` and `Library.Model`
   #### Contains: 
   ```
