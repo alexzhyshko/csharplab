@@ -1,13 +1,13 @@
 # C# labs repos
 Solution has three separated projects, which are connected between each other by adding dependencies. 
 - Library: main project, **`.NET Core 3.0`**, uses `Library.Domain` and `Library.Model`
-  ####Contains: 
+  #### Contains: 
   ```
   Program.cs
   RentalController.cs
   ```
 - Library.Model: emulator of DB model type, **`.NET Standard Library`**, uses `Library.Domain`
-  ####Contains: 
+  #### Contains: 
   ```
   AdminModel.cs
   BookModel.cs
@@ -16,7 +16,7 @@ Solution has three separated projects, which are connected between each other by
   RentalModel.cs
   ```
 - Library.Domain: class library, **`.NET Standard Library`**, * *doesn't use any of the projects* *
-  ####Contains: 
+  #### Contains: 
   ```
   Person.cs
   Reader.cs
