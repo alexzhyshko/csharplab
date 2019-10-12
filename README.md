@@ -1,4 +1,3 @@
-# csharplab
 # C# labs repos
 Project has three separated projects, which are connected between each other by adding dependensies. 
 - Library: main project, .NET Core 3.0, uses Library.Domain and Library.Model
