@@ -183,7 +183,16 @@ namespace Library
 
         public List<Book> FindBooks(string input)
         {
-            return _books.Find(input);
+            List<Book> books = _books.Find(input);
+            List<Book> res = new List<Book>();
+            foreach (Book book in books)
+            {
+                if (!RentalModel.GetBookRentStatus(book.Id))
+                {
+                    res.Add(book);
+                }
+            }
+            return res;
         }
 
         private bool CheckParams(Book book, Reader reader)

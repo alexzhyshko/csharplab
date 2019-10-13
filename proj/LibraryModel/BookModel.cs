@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using Library.Domain;
 
 namespace Library.Model
@@ -21,10 +22,11 @@ namespace Library.Model
             List<Book> res = new List<Book>();
             foreach (Book book in _books.Values)
             {
-                if (book.Name.ToLower().Contains(text.ToLower()))
+                if(book.Name.Contains(text))
                 {
                     res.Add(book);
                 }
+               
             }
             return res;
         }

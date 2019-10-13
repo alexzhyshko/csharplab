@@ -87,7 +87,7 @@
                     Console.BackgroundColor = choiceBackColor;
                     Console.ForegroundColor = choiceFontColor;
                 }
-                Console.WriteLine(">" + (i + 1) + ". " + commands[i]);
+                Console.WriteLine(">" + commands[i]);
                 Console.ResetColor();
                 index++;
             }
@@ -726,25 +726,92 @@
             Console.ForegroundColor = noticeFontColor;
             Console.WriteLine("Input word to search for: ");
             Console.ResetColor();
-            if (Console.KeyAvailable)
+            string input = string.Empty;
+            int index = 0;
+            int selectedIndex = 0;
+
+            List<Book> foundBooks = new List<Book>();
+
+            while (true)
             {
-                if (Console.ReadKey().Key == ConsoleKey.Escape)
+
+                
+
+                foundBooks = rental.FindBooks(input).GroupBy(book => book.Name).Select(g => g.First()).ToList();
+                index = 0;
+                Console.Clear();
+                Console.Clear();
+                Console.BackgroundColor = titleBackColor;
+                Console.ForegroundColor = titleFontColor;
+                Console.WriteLine("----FIND BOOK----");
+                Console.BackgroundColor = noticeBackColor;
+                Console.ForegroundColor = noticeFontColor;
+                Console.WriteLine(">Input word to search for: ");
+                Console.ResetColor();
+                Console.BackgroundColor = choiceBackColor;
+                Console.ForegroundColor = choiceFontColor;
+                Console.WriteLine(">" + input);
+                Console.ResetColor();
+                Console.BackgroundColor = noticeBackColor;
+                Console.ForegroundColor = noticeFontColor;
+                Console.WriteLine(">Select book using arrows");
+                Console.ResetColor();
+                Console.WriteLine(foundBooks.Count != 0 ? ">Available books: " : "No books available");
+                if (foundBooks.Count > 0) OptimisedListRender(selectedIndex, foundBooks);
+
+                ConsoleKeyInfo keyInfo = Console.ReadKey(intercept: true);
+                ConsoleKey key = keyInfo.Key;
+                if (key == ConsoleKey.UpArrow)
+                {
+                    if (selectedIndex > 0)
+                    {
+                        selectedIndex--;
+                    }
+                }else if (key == ConsoleKey.DownArrow)
+                {
+                    if (selectedIndex < foundBooks.Count - 1)
+                    {
+                        selectedIndex++;
+                    }
+                }else if (key == ConsoleKey.Enter)
+                {
+
+                    break;
+                }else if (key == ConsoleKey.Escape)
                 {
                     return false;
+                }else if (key == ConsoleKey.Backspace)
+                {
+                    selectedIndex = 0;
+                    if (!string.IsNullOrEmpty(input))
+                    {
+                        input = input.Substring(0, input.Length - 1);
+                        
+                    }
+
+                    
+                }else
+                {
+                    if ((keyInfo.Modifiers & ConsoleModifiers.Shift) != 0)
+                    {
+                        input+= key.ToString();
+                    }
+                    else
+                    {
+                        input += key.ToString().ToLower();
+                    }
+                    
                 }
+
+                
+
+                
             }
 
-            string input = Console.ReadLine();
-            if (string.IsNullOrEmpty(input))
+            if (foundBooks.Count <= 0)
             {
-                return false;
-            }
-
-            List<Book> foundBooks = rental.FindBooks(input).GroupBy(book => book.Name).Select(g => g.First()).ToList();
-            if (foundBooks.Count == 0)
-            {
-                Console.WriteLine("Nothing found, press any key to proceed...");
-
+                Console.WriteLine();
+                Console.WriteLine("Noting found, press any key to return...");
                 while (true)
                 {
                     if (Console.ReadKey() != null)
@@ -754,55 +821,7 @@
                 }
                 return false;
             }
-
-            int index = 0;
-            int selectedIndex = 0;
-            OptimisedListRender(selectedIndex, foundBooks);
-
-            while (true)
-            {
-                ConsoleKeyInfo keyInfo = Console.ReadKey();
-                ConsoleKey key = keyInfo.Key;
-                if (key == ConsoleKey.UpArrow)
-                {
-                    if (selectedIndex > 0)
-                    {
-                        selectedIndex--;
-                    }
-                }
-
-                if (key == ConsoleKey.DownArrow)
-                {
-                    if (selectedIndex < foundBooks.Count - 1)
-                    {
-                        selectedIndex++;
-                    }
-                }
-
-                if (key == ConsoleKey.Enter)
-                {
-                    break;
-                }
-
-                if (key == ConsoleKey.Escape)
-                {
-                    return false;
-                }
-
-                index = 0;
-                Console.Clear();
-                Console.Clear();
-                Console.BackgroundColor = titleBackColor;
-                Console.ForegroundColor = titleFontColor;
-                Console.WriteLine("----FIND BOOK----");
-                Console.BackgroundColor = noticeBackColor;
-                Console.ForegroundColor = noticeFontColor;
-                Console.WriteLine(">Select book using arrows");
-                Console.ResetColor();
-                Console.WriteLine(foundBooks.Count != 0 ? ">Available books: " : "No books available");
-                OptimisedListRender(selectedIndex, foundBooks);
-            }
-
+            
             res = foundBooks[selectedIndex];
             if (res != null)
             {
