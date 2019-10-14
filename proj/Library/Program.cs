@@ -23,6 +23,9 @@
         private static ConsoleColor choiceBackColor = ConsoleColor.White;
         private static ConsoleColor choiceFontColor = ConsoleColor.Black;
 
+        private static ConsoleColor menuBackColor = ConsoleColor.Blue;
+        private static ConsoleColor menuFontColor = ConsoleColor.White;
+
         public static void Main(string[] args)
         {
 
@@ -73,10 +76,13 @@
         public static void PrintStartInfo()
         {
             Console.Clear();
-            List<string> commands = new List<string>() { "Rent", "Return", "Add*", "Remove*", "Get reader*", "Register", "Exit" };
-            Console.BackgroundColor = noticeBackColor;
-            Console.ForegroundColor = noticeFontColor;
-            Console.WriteLine(">Select what you want to do");
+            List<string> commands = new List<string>() { "Rent", "Return", "Add*", "Remove*", "Get reader*", "Register"};
+            Console.BackgroundColor = menuBackColor;
+            Console.ForegroundColor = menuFontColor;
+            Console.WriteLine("|   Esc - quit   | Enter - choose| Up, Down arrows - navigate |");
+            Console.BackgroundColor = titleBackColor;
+            Console.ForegroundColor = titleFontColor;
+            Console.WriteLine("|                             MENU                            |");
             Console.ResetColor();
             int chosenCommandIndex = 0;
             int index = 0;
@@ -87,7 +93,7 @@
                     Console.BackgroundColor = choiceBackColor;
                     Console.ForegroundColor = choiceFontColor;
                 }
-                Console.WriteLine(">" + commands[i]);
+                Console.WriteLine("> " + commands[i]);
                 Console.ResetColor();
                 index++;
             }
@@ -120,10 +126,19 @@
                     break;
                 }
 
+                if (key == ConsoleKey.Escape)
+                {
+                    Console.Clear();
+                    Environment.Exit(0);
+                }
+
                 Console.Clear();
-                Console.BackgroundColor = noticeBackColor;
-                Console.ForegroundColor = noticeFontColor;
-                Console.WriteLine(">Select what you want to do");
+                Console.BackgroundColor = menuBackColor;
+                Console.ForegroundColor = menuFontColor;
+                Console.WriteLine("|   Esc - quit   | Enter - choose| Up, Down arrows - navigate |");
+                Console.BackgroundColor = titleBackColor;
+                Console.ForegroundColor = titleFontColor;
+                Console.WriteLine("|                             MENU                            |");
                 Console.ResetColor();
                 index = 0;
                 foreach (string command in commands)
@@ -133,7 +148,7 @@
                         Console.BackgroundColor = choiceBackColor;
                         Console.ForegroundColor = choiceFontColor;
                     }
-                    Console.WriteLine(">" + (index + 1) + ". " + command);
+                    Console.WriteLine("> " + command);
                     Console.ResetColor();
                     index++;
                 }
@@ -166,34 +181,7 @@
                 case 5:
                     ProceedToRegister();
                     break;
-                case 6:
-                    Console.Clear();
-                    Environment.Exit(0);
-                    break;
-
             }
-        }
-
-        public static char GetInput()
-        {
-            try
-            {
-                return Console.ReadKey().KeyChar;
-            }
-            catch
-            {
-                Console.Clear();
-                Console.WriteLine("Incorrect input, press any key to proceed...");
-                while (true)
-                {
-                    if (Console.ReadKey() != null)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            return 'a';
         }
 
         public static void ProceedToRent()
@@ -225,16 +213,15 @@
             while (true)
             {
                 Console.Clear();
+                Console.BackgroundColor = menuBackColor;
+                Console.ForegroundColor = menuFontColor;
+                Console.WriteLine("|   Esc - exit   | Enter - choose| Alt+F - search | Up, Down arrows - navigate |");
                 Console.BackgroundColor = titleBackColor;
                 Console.ForegroundColor = titleFontColor;
-                Console.WriteLine("----RENT BOOK----");
-                Console.ResetColor();
-                Console.BackgroundColor = noticeBackColor;
-                Console.ForegroundColor = noticeFontColor;
-                Console.WriteLine("Alt+F - search books" + "\n" + ">Select book using arrows");
+                Console.WriteLine("|                                  RENT BOOK                                   |");
                 Console.BackgroundColor = infoBackColor;
                 Console.ForegroundColor = infoFontColor;
-                Console.WriteLine(">User: " + user.Name+"\n"+ "(userid: " + user.Id + ")");
+                Console.WriteLine(">User: " + user.Name);
                 Console.ResetColor();
                 List<Book> books = rental.GetAllNonBookedBooks().GroupBy(book => book.Name).Select(g => g.First()).ToList();
                 Console.WriteLine(books.Count != 0 ? ">Available books: " : "No books available");
@@ -285,15 +272,15 @@
 
                         
                         Console.Clear();
+                        Console.BackgroundColor = menuBackColor;
+                        Console.ForegroundColor = menuFontColor;
+                        Console.WriteLine("|   Esc - exit   | Enter - choose| Alt+F - search | Up, Down arrows - navigate |");
                         Console.BackgroundColor = titleBackColor;
                         Console.ForegroundColor = titleFontColor;
-                        Console.WriteLine("----RENT BOOK----");
-                        Console.BackgroundColor = noticeBackColor;
-                        Console.ForegroundColor = noticeFontColor;
-                        Console.WriteLine("Alt+F - search books" + "\n" + ">Select book using arrows");
+                        Console.WriteLine("|                                  RENT BOOK                                   |");
                         Console.BackgroundColor = infoBackColor;
                         Console.ForegroundColor = infoFontColor;
-                        Console.WriteLine(">User: " + user.Name + "\n" + "(userid: " + user.Id + ")");
+                        Console.WriteLine(">User: " + user.Name);
                         Console.ResetColor();
                         Console.WriteLine(books.Count != 0 ? ">Available books: " : "No books available");
                         OptimisedListRender(chosenBookIndex, books);
@@ -310,7 +297,7 @@
                         Console.WriteLine("----RENT BOOK----");
                         Console.BackgroundColor = infoBackColor;
                         Console.ForegroundColor = infoFontColor;
-                        Console.WriteLine(">User: " + user.Name+"\n"+ "(userid: " + user.Id + ")"+"\n"+ ">Book: " + book.Name+"\n"+ "(bookid: " + book.Id + ")");
+                        Console.WriteLine(">User: " + user.Name + "\n" + ">Book: " + book.Name);
                         Console.ResetColor();
                         Console.WriteLine(rental.TryRentBook(book, user) ? "Rented successfully" : "Error, coludn't rent");
                         break;
@@ -353,7 +340,7 @@
                 Console.Clear();
                 Console.BackgroundColor = titleBackColor;
                 Console.ForegroundColor = titleFontColor;
-                Console.WriteLine("----RETURN BOOK----");
+                Console.WriteLine("|                   RETURN BOOK                   |");
                 Console.ResetColor();
                 Console.WriteLine();
                 Console.WriteLine(">Type your username");
@@ -373,18 +360,20 @@
 
             int chosenBookIndex = 0;
             Console.Clear();
+            Console.BackgroundColor = menuBackColor;
+            Console.ForegroundColor = menuFontColor;
+            Console.WriteLine("|   Esc - exit   | Enter - choose| Up, Down arrows - navigate |");
             Console.BackgroundColor = titleBackColor;
             Console.ForegroundColor = titleFontColor;
-            Console.WriteLine("----RETURN BOOK----");
+            Console.WriteLine("|                         RENT BOOK                           |");
             Console.BackgroundColor = infoBackColor;
             Console.ForegroundColor = infoFontColor;
-            Console.WriteLine(">User: " + user.Name+"\n"+ "(userid: " + user.Id + ")");
+            Console.WriteLine(">User: " + user.Name);
             Console.ResetColor();
             List<Book> books = rental.GetUserBooks(user);
             Console.WriteLine(books.Count != 0 ? ">Your books: " : "You haven't rent any books yet");
             if (books.Count != 0)
             {
-                Console.WriteLine(">Select book using arrows ");
                 OptimisedListRender(chosenBookIndex, books);
                 Guid bookid = Guid.Empty;
                 while (true)
@@ -420,15 +409,18 @@
                     }
 
                     Console.Clear();
+                    Console.BackgroundColor = menuBackColor;
+                    Console.ForegroundColor = menuFontColor;
+                    Console.WriteLine("|   Esc - exit   | Enter - choose| Up, Down arrows - navigate |");
                     Console.BackgroundColor = titleBackColor;
                     Console.ForegroundColor = titleFontColor;
-                    Console.WriteLine("----RETURN BOOK----");
+                    Console.WriteLine("|                         RENT BOOK                           |");
+                    Console.ResetColor();
                     Console.BackgroundColor = infoBackColor;
                     Console.ForegroundColor = infoFontColor;
-                    Console.WriteLine(">User: " + user.Name+"\n"+ "(userid: " + user.Id + ")");
+                    Console.WriteLine(">User: " + user.Name);
                     Console.ResetColor();
                     Console.WriteLine(books.Count != 0 ? ">Available books: " : "No books available");
-                    Console.WriteLine(">Select book using arrows ");
                     OptimisedListRender(chosenBookIndex, books);
 
                 }
@@ -442,7 +434,7 @@
                 Console.WriteLine("----RETURN BOOK----");
                 Console.BackgroundColor = infoBackColor;
                 Console.ForegroundColor = infoFontColor;
-                Console.WriteLine(">User: " + user.Name+"\n"+ "(userid: " + user.Id + ")");
+                Console.WriteLine(">User: " + user.Name);
                 Console.ResetColor();
                 Book b = rental.TryGetBookById(bookid);
                 if (b == null)
@@ -466,7 +458,7 @@
 
                 Console.BackgroundColor = infoBackColor;
                 Console.ForegroundColor = infoFontColor;
-                Console.WriteLine(">Book: " + b.Name+"\n"+ "(bookid: " + b.Id + ")");
+                Console.WriteLine(">Book: " + b.Name);
                 Console.ResetColor();
                 Console.WriteLine(rental.TryReturnBook(b, user) ? "Returned successfully" : "Error, coludn't return");
             }
@@ -700,7 +692,7 @@
             bool result = rental.TryRegisterUser(new Reader(newId, username));
             if (result)
             {
-                Console.WriteLine("Ok, your username will be: " + username+"\n"+ "(id: " + newId + ")");
+                Console.WriteLine("Ok, your username will be: " + username);
             }
             Console.WriteLine(result ? "Successfully registered" : "Problem registering, maybe user exists");
 
@@ -719,9 +711,12 @@
 
             Book res = null;
             Console.Clear();
+            Console.BackgroundColor = menuBackColor;
+            Console.ForegroundColor = menuFontColor;
+            Console.WriteLine("|   Esc - exit   | Enter - choose| Up, Down arrows - navigate |");
             Console.BackgroundColor = titleBackColor;
             Console.ForegroundColor = titleFontColor;
-            Console.WriteLine("----FIND BOOK----");
+            Console.WriteLine("|                         FIND BOOK                           |");
             Console.BackgroundColor = noticeBackColor;
             Console.ForegroundColor = noticeFontColor;
             Console.WriteLine("Input word to search for: ");
@@ -734,16 +729,15 @@
 
             while (true)
             {
-
-                
-
                 foundBooks = rental.FindBooks(input).GroupBy(book => book.Name).Select(g => g.First()).ToList();
                 index = 0;
                 Console.Clear();
-                Console.Clear();
+                Console.BackgroundColor = menuBackColor;
+                Console.ForegroundColor = menuFontColor;
+                Console.WriteLine("|   Esc - exit   | Enter - choose| Up, Down arrows - navigate |");
                 Console.BackgroundColor = titleBackColor;
                 Console.ForegroundColor = titleFontColor;
-                Console.WriteLine("----FIND BOOK----");
+                Console.WriteLine("|                         FIND BOOK                           |");
                 Console.BackgroundColor = noticeBackColor;
                 Console.ForegroundColor = noticeFontColor;
                 Console.WriteLine(">Input word to search for: ");
@@ -758,7 +752,6 @@
                 Console.ResetColor();
                 Console.WriteLine(foundBooks.Count != 0 ? ">Available books: " : "No books available");
                 if (foundBooks.Count > 0) OptimisedListRender(selectedIndex, foundBooks);
-
                 ConsoleKeyInfo keyInfo = Console.ReadKey(intercept: true);
                 ConsoleKey key = keyInfo.Key;
                 if (key == ConsoleKey.UpArrow)
@@ -786,26 +779,19 @@
                     if (!string.IsNullOrEmpty(input))
                     {
                         input = input.Substring(0, input.Length - 1);
-                        
                     }
-
-                    
-                }else
+                }
+                else
                 {
                     if ((keyInfo.Modifiers & ConsoleModifiers.Shift) != 0)
                     {
-                        input+= key.ToString();
+                        input += key.ToString();
                     }
                     else
                     {
                         input += key.ToString().ToLower();
                     }
-                    
                 }
-
-                
-
-                
             }
 
             if (foundBooks.Count <= 0)
@@ -819,9 +805,10 @@
                         break;
                     }
                 }
+
                 return false;
             }
-            
+
             res = foundBooks[selectedIndex];
             if (res != null)
             {
@@ -829,10 +816,16 @@
                 Console.Clear();
                 Console.BackgroundColor = titleBackColor;
                 Console.ForegroundColor = titleFontColor;
-                Console.WriteLine("----FIND BOOK----");
+                Console.Clear();
+                Console.BackgroundColor = menuBackColor;
+                Console.ForegroundColor = menuFontColor;
+                Console.WriteLine("|   Esc - exit   | Enter - choose| Up, Down arrows - navigate |");
+                Console.BackgroundColor = titleBackColor;
+                Console.ForegroundColor = titleFontColor;
+                Console.WriteLine("|                         FIND BOOK                           |");
                 Console.BackgroundColor = infoBackColor;
                 Console.ForegroundColor = infoFontColor;
-                Console.WriteLine(">User: " + user.Name+"\n"+ "(userid: " + user.Id + ")"+"\n"+ ">Book: " + res.Name+"\n"+ "(bookid: " + res.Id + ")");
+                Console.WriteLine(">User: " + user.Name+"\n"+ ">Book: " + res.Name);
                 Console.ResetColor();
                 Console.WriteLine(rental.TryRentBook(res, user) ? "Rented successfully" : "Error, coludn't rent");
                 Console.WriteLine("\n"+"Press any key to proceed...");
@@ -916,8 +909,6 @@
             }
 
             Console.Write(output);
-        }
-
-        
+        } 
     }
 }
