@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using Library.Domain;
 
-namespace Library.Model
+namespace Library.Managers
 {
-    public class ReaderModel
+    public class ReaderManager
     {
         private Dictionary<Guid, Reader> _readers = new Dictionary<Guid, Reader>();
 
-        public ReaderModel()
+        public ReaderManager()
         {
 
         }
@@ -30,7 +30,6 @@ namespace Library.Model
             return result;
         }
 
-
         public Reader TryPickByName(string name)
         {
             foreach (Reader reader in _readers.Values)
@@ -42,7 +41,6 @@ namespace Library.Model
             }
             return null;
         }
-
 
         public bool TryAdd(Reader reader)
         {
@@ -72,6 +70,7 @@ namespace Library.Model
             _readers.Remove(readerid);
             return startCount - _readers.Count == 1;
         }
+
         public Reader TryGet(Guid id)
         {
             if (!_readers.ContainsKey(id))

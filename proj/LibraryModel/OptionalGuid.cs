@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Library.Model
+namespace Library.Managers
 {
     public class OptionalGuid
     {

@@ -4,8 +4,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Input;
+    using Library.Application;
     using Library.Domain;
-    using Library.Model;
+    using Library.Managers;
 
     public class Program
     {
@@ -30,14 +31,14 @@
         {
 
             Admin admin = new Admin(Guid.NewGuid(), "alex25713");
-            AdminModel adminModel = new AdminModel();
+            AdminManager adminModel = new AdminManager();
             adminModel.TryAdd(admin);
 
-            BookModel booksModel = new BookModel();
-            ReaderModel readersModel = new ReaderModel();
+            BookManager booksModel = new BookManager();
+            ReaderManager readersModel = new ReaderManager();
             readersModel.TryAdd(new Reader(Guid.NewGuid(), "adad"));
             readersModel.TryAdd(admin);
-            RentalModel rentalModel = new RentalModel();
+            RentalManager rentalModel = new RentalManager();
 
             rental = new RentalController(booksModel, rentalModel, readersModel, adminModel);
 
@@ -875,6 +876,7 @@
                 output += "\n";
                 index++;
             }
+
             Console.Write(output);
             Console.BackgroundColor = choiceBackColor;
             Console.ForegroundColor = choiceFontColor;
@@ -909,6 +911,6 @@
             }
 
             Console.Write(output);
-        } 
+        }
     }
 }

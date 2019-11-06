@@ -1,22 +1,22 @@
 ﻿
 
-namespace Library
+namespace Library.Application
 {
 
     using System;
     using System.Collections.Generic;
     using System.Text;
     using Library.Domain;
-    using Library.Model;
+    using Library.Managers;
 
     public class RentalController
     {
-        private BookModel _books;
-        private RentalModel _rental;
-        private ReaderModel _readers;
-        private AdminModel _admins;
+        private BookManager _books;
+        private RentalManager _rental;
+        private ReaderManager _readers;
+        private AdminManager _admins;
 
-        public RentalController(BookModel books, RentalModel rental, ReaderModel readers, AdminModel admins)
+        public RentalController(BookManager books, RentalManager rental, ReaderManager readers, AdminManager admins)
         {
             _books = books;
             _rental = rental;
@@ -58,7 +58,7 @@ namespace Library
                 return false;
             }
 
-            if (RentalModel.GetBookRentStatus(book.Id))
+            if (RentalManager.GetBookRentStatus(book.Id))
             {
                 return false;
             }
@@ -77,7 +77,7 @@ namespace Library
                 return false;
             }
 
-            if (!RentalModel.GetBookRentStatus(book.Id))
+            if (!RentalManager.GetBookRentStatus(book.Id))
             {
                 return false;
             }
@@ -102,7 +102,7 @@ namespace Library
         public bool TryRemoveBook(Book book)
         {
 
-            if (!RentalModel.GetBookRentStatus(book.Id))
+            if (!RentalManager.GetBookRentStatus(book.Id))
             {
                 return _books.TryRemove(book.Id) && _rental.TryRemove(book.Id);
             }
@@ -122,7 +122,7 @@ namespace Library
             List<Book> temp = _books.TryGetAll();
             foreach (Book book in temp)
             {
-                if (!RentalModel.GetBookRentStatus(book.Id))
+                if (!RentalManager.GetBookRentStatus(book.Id))
                 {
                     res.Add(book);
                 }
@@ -187,7 +187,7 @@ namespace Library
             List<Book> res = new List<Book>();
             foreach (Book book in books)
             {
-                if (!RentalModel.GetBookRentStatus(book.Id))
+                if (!RentalManager.GetBookRentStatus(book.Id))
                 {
                     res.Add(book);
                 }

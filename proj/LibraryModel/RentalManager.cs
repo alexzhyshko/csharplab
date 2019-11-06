@@ -5,15 +5,15 @@ using Library.Domain;
 
 
 
-namespace Library.Model
+namespace Library.Managers
 {
-    public class RentalModel
+    public class RentalManager
     {
         
         private static Dictionary<Guid, Guid> _rental = new Dictionary<Guid, Guid>();
        
 
-        public RentalModel()
+        public RentalManager()
         {
            
         }

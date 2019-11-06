@@ -1,0 +1,16 @@
+C:\Users\sanja\source\repos\Library.Domain\Library\bin\Debug\netcoreapp3.0\Library.exe
+C:\Users\sanja\source\repos\Library.Domain\Library\bin\Debug\netcoreapp3.0\Library.deps.json
+C:\Users\sanja\source\repos\Library.Domain\Library\bin\Debug\netcoreapp3.0\Library.runtimeconfig.json
+C:\Users\sanja\source\repos\Library.Domain\Library\bin\Debug\netcoreapp3.0\Library.runtimeconfig.dev.json
+C:\Users\sanja\source\repos\Library.Domain\Library\bin\Debug\netcoreapp3.0\Library.dll
+C:\Users\sanja\source\repos\Library.Domain\Library\bin\Debug\netcoreapp3.0\Library.pdb
+C:\Users\sanja\source\repos\Library.Domain\Library\obj\Debug\netcoreapp3.0\Library.csprojAssemblyReference.cache
+C:\Users\sanja\source\repos\Library.Domain\Library\obj\Debug\netcoreapp3.0\Library.AssemblyInfoInputs.cache
+C:\Users\sanja\source\repos\Library.Domain\Library\obj\Debug\netcoreapp3.0\Library.AssemblyInfo.cs
+C:\Users\sanja\source\repos\Library.Domain\Library\obj\Debug\netcoreapp3.0\Library.dll
+C:\Users\sanja\source\repos\Library.Domain\Library\obj\Debug\netcoreapp3.0\Library.pdb
+C:\Users\sanja\source\repos\Library.Domain\Library\bin\Debug\netcoreapp3.0\Library.Domain.dll
+C:\Users\sanja\source\repos\Library.Domain\Library\bin\Debug\netcoreapp3.0\Library.Domain.pdb
+C:\Users\sanja\source\repos\Library.Domain\Library\obj\Debug\netcoreapp3.0\Library.csproj.CopyComplete
+C:\Users\sanja\source\repos\Library.Domain\Library\bin\Debug\netcoreapp3.0\Library.Model.dll
+C:\Users\sanja\source\repos\Library.Domain\Library\bin\Debug\netcoreapp3.0\Library.Model.pdb

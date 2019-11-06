@@ -4,14 +4,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Library.Domain;
 
-namespace Library.Model
+namespace Library.Managers
 {
-    public class BookModel
+    public class BookManager
     {
         
         private Dictionary<Guid, Book> _books = new Dictionary<Guid, Book>();
 
-        public BookModel()
+        public BookManager()
         {
 
         }
@@ -30,11 +30,12 @@ namespace Library.Model
             }
             return res;
         }
+
         public Book TryPickByName(string name)
         {
             foreach (Book book in _books.Values)
             {
-                if (book.Name.Equals(name)&&!RentalModel.GetBookRentStatus(book.Id))
+                if (book.Name.Equals(name)&&!RentalManager.GetBookRentStatus(book.Id))
                 {
                     return book;
                 }
@@ -53,6 +54,7 @@ namespace Library.Model
             return startSize != _books.Count;
 
         }
+
         public bool TryRemove(Guid id)
         {
             if (!_books.ContainsKey(id))
@@ -73,7 +75,6 @@ namespace Library.Model
             return _books[id];
         }
         
-
         public List<Book> TryGetAll()
         {
             List<Book> res = new List<Book>();

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using Library.Domain;
 
-namespace Library.Model
+namespace Library.Managers
 {
-    public class AdminModel
+    public class AdminManager
     {
         private List<Admin> _admins = new List<Admin>();
 
-        public AdminModel()
+        public AdminManager()
         {
             
         }
