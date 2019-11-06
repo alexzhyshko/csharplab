@@ -1,0 +1,174 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETCoreApp,Version=v3.0": {
+      "StyleCop.Analyzers/1.1.118": {
+        "type": "package"
+      },
+      "Library.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Library.Domain": "1.0.0",
+          "Library.Managers": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Library.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Library.Application.dll": {}
+        }
+      },
+      "Library.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Library.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Library.Domain.dll": {}
+        }
+      },
+      "Library.Managers/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Library.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Library.Managers.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Library.Managers.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "StyleCop.Analyzers/1.1.118": {
+      "sha512": "Onx6ovGSqXSK07n/0eM3ZusiNdB6cIlJdabQhWGgJp3Vooy9AaLS/tigeybOJAobqbtggTamoWndz72JscZBvw==",
+      "type": "package",
+      "path": "stylecop.analyzers/1.1.118",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "THIRD-PARTY-NOTICES.txt",
+        "analyzers/dotnet/cs/StyleCop.Analyzers.CodeFixes.dll",
+        "analyzers/dotnet/cs/StyleCop.Analyzers.dll",
+        "analyzers/dotnet/cs/de-DE/StyleCop.Analyzers.resources.dll",
+        "analyzers/dotnet/cs/en-GB/StyleCop.Analyzers.resources.dll",
+        "analyzers/dotnet/cs/es-MX/StyleCop.Analyzers.resources.dll",
+        "analyzers/dotnet/cs/fr-FR/StyleCop.Analyzers.resources.dll",
+        "analyzers/dotnet/cs/pl-PL/StyleCop.Analyzers.resources.dll",
+        "analyzers/dotnet/cs/pt-BR/StyleCop.Analyzers.resources.dll",
+        "analyzers/dotnet/cs/ru-RU/StyleCop.Analyzers.resources.dll",
+        "stylecop.analyzers.1.1.118.nupkg.sha512",
+        "stylecop.analyzers.nuspec",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
+      ]
+    },
+    "Library.Application/1.0.0": {
+      "type": "project",
+      "path": "../Library.Application/Library.Application.csproj",
+      "msbuildProject": "../Library.Application/Library.Application.csproj"
+    },
+    "Library.Domain/1.0.0": {
+      "type": "project",
+      "path": "../Library.Domain/Library.Domain.csproj",
+      "msbuildProject": "../Library.Domain/Library.Domain.csproj"
+    },
+    "Library.Managers/1.0.0": {
+      "type": "project",
+      "path": "../LibraryModel/Library.Managers.csproj",
+      "msbuildProject": "../LibraryModel/Library.Managers.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETCoreApp,Version=v3.0": [
+      "Library.Application >= 1.0.0",
+      "Library.Domain >= 1.0.0",
+      "Library.Managers >= 1.0.0",
+      "StyleCop.Analyzers >= 1.1.118"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\sanja\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\sanja\\source\\repos\\Library.Domain\\Library\\Library.csproj",
+      "projectName": "Library",
+      "projectPath": "C:\\Users\\sanja\\source\\repos\\Library.Domain\\Library\\Library.csproj",
+      "packagesPath": "C:\\Users\\sanja\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\sanja\\source\\repos\\Library.Domain\\Library\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\sanja\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "netcoreapp3.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "projectReferences": {
+            "C:\\Users\\sanja\\source\\repos\\Library.Domain\\Library.Application\\Library.Application.csproj": {
+              "projectPath": "C:\\Users\\sanja\\source\\repos\\Library.Domain\\Library.Application\\Library.Application.csproj"
+            },
+            "C:\\Users\\sanja\\source\\repos\\Library.Domain\\Library.Domain\\Library.Domain.csproj": {
+              "projectPath": "C:\\Users\\sanja\\source\\repos\\Library.Domain\\Library.Domain\\Library.Domain.csproj"
+            },
+            "C:\\Users\\sanja\\source\\repos\\Library.Domain\\LibraryModel\\Library.Managers.csproj": {
+              "projectPath": "C:\\Users\\sanja\\source\\repos\\Library.Domain\\LibraryModel\\Library.Managers.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "netcoreapp3.0": {
+        "dependencies": {
+          "StyleCop.Analyzers": {
+            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[1.1.118, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

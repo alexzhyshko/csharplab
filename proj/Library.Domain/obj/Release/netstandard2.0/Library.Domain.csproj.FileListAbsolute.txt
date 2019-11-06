@@ -1,0 +1,8 @@
+C:\Users\sanja\source\repos\Library.Domain\Library.Domain\bin\Release\netstandard2.0\Library.Domain.deps.json
+C:\Users\sanja\source\repos\Library.Domain\Library.Domain\bin\Release\netstandard2.0\Library.Domain.dll
+C:\Users\sanja\source\repos\Library.Domain\Library.Domain\bin\Release\netstandard2.0\Library.Domain.pdb
+C:\Users\sanja\source\repos\Library.Domain\Library.Domain\obj\Release\netstandard2.0\Library.Domain.csprojAssemblyReference.cache
+C:\Users\sanja\source\repos\Library.Domain\Library.Domain\obj\Release\netstandard2.0\Library.Domain.AssemblyInfoInputs.cache
+C:\Users\sanja\source\repos\Library.Domain\Library.Domain\obj\Release\netstandard2.0\Library.Domain.AssemblyInfo.cs
+C:\Users\sanja\source\repos\Library.Domain\Library.Domain\obj\Release\netstandard2.0\Library.Domain.dll
+C:\Users\sanja\source\repos\Library.Domain\Library.Domain\obj\Release\netstandard2.0\Library.Domain.pdb
