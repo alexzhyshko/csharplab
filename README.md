@@ -6,21 +6,26 @@ Solution has three separated projects, which are connected between each other by
 
 
 ------
-- Library: main project, **`.NET Core 3.0`**, uses `Library.Domain` and `Library.Model`
+- Library: main project, **`.NET Core 3.0`**, uses `Library.Domain` and `Library.Managers`
   #### Contains: 
   ```
   Program.cs
+  ```
+------
+- Library.Application: controller for whole program, **`.NET Core 3.0`**, uses `Library.Domain` and `Library.Managers`
+  #### Contains: 
+  ```
   RentalController.cs
   ```
 ------
-- Library.Model: emulator of DB model type, **`.NET Standard Library 2.0`**, uses `Library.Domain`
+- Library.Managers: DB access classes, **`.NET Standard Library 2.0`**, uses `Library.Domain`
   #### Contains: 
   ```
-  AdminModel.cs
-  BookModel.cs
+  AdminManager.cs
+  BookManager.cs
   OptionalGuid.cs
-  ReaderModel.cs
-  RentalModel.cs
+  ReaderManagerl.cs
+  RentalManager.cs
   ```
 ------
 - Library.Domain: class library, **`.NET Standard Library 2.0`**, *doesn't use any of the projects*
