@@ -27,47 +27,15 @@
         private static ConsoleColor menuBackColor = ConsoleColor.Blue;
         private static ConsoleColor menuFontColor = ConsoleColor.White;
 
+       
+
         public static void Main(string[] args)
         {
-
-            Admin admin = new Admin(Guid.NewGuid(), "alex25713");
             AdminManager adminModel = new AdminManager();
-            adminModel.TryAdd(admin);
-
             BookManager booksModel = new BookManager();
             ReaderManager readersModel = new ReaderManager();
-            readersModel.TryAdd(new Reader(Guid.NewGuid(), "adad"));
-            readersModel.TryAdd(admin);
             RentalManager rentalModel = new RentalManager();
-
-            rental = new RentalController(booksModel, rentalModel, readersModel, adminModel);
-
-            Book book1 = new Book(Guid.NewGuid(), "The Lady From The Black Lagoon", new List<Author>() { new Author(Guid.NewGuid(), "Mallory O'Meara") });
-            Book book2 = new Book(Guid.NewGuid(), "My Friend Anna", new List<Author>() { new Author(Guid.NewGuid(), "Rachel Deloache Williams") });
-            Book book3 = new Book(Guid.NewGuid(), "The Spirit of Science Fiction ", new List<Author>() { new Author(Guid.NewGuid(), "Roberto Bolaño") });
-            Book book4 = new Book(Guid.NewGuid(), "The White Book", new List<Author>() { new Author(Guid.NewGuid(), "Han Kang") });
-            Book book5 = new Book(Guid.NewGuid(), "So Much Longing in So Little Space: The Art of Edvard Munch ", new List<Author>() { new Author(Guid.NewGuid(), "Karl Ove Knausgaard") });
-            Book book6 = new Book(Guid.NewGuid(), "King of Joy", new List<Author>() { new Author(Guid.NewGuid(), "Richard Chiem") });
-            Book book7 = new Book(Guid.NewGuid(), "The Bird King ", new List<Author>() { new Author(Guid.NewGuid(), "G. Willow Wilson") });
-            Book book8 = new Book(Guid.NewGuid(), "Exhalation: Stories", new List<Author>() { new Author(Guid.NewGuid(), "Ted Chiang") });
-            Book book9 = new Book(Guid.NewGuid(), "Bowlaway", new List<Author>() { new Author(Guid.NewGuid(), "Elizabeth McCracken") });
-            Book book10 = new Book(Guid.NewGuid(), "When You Read This", new List<Author>() { new Author(Guid.NewGuid(), "Mary Adkins") });
-            Book book11 = new Book(Guid.NewGuid(), "Mostly Dead Things", new List<Author>() { new Author(Guid.NewGuid(), "Kristen Arnett") });
-            Book book12 = new Book(Guid.NewGuid(), "Last Night In Nuuk", new List<Author>() { new Author(Guid.NewGuid(), "Niviaq Korneliussen") });
-
-            rental.TryAddBook(book1);
-            rental.TryAddBook(book2);
-            rental.TryAddBook(book3);
-            rental.TryAddBook(book4);
-            rental.TryAddBook(book5);
-            rental.TryAddBook(book6);
-            rental.TryAddBook(book7);
-            rental.TryAddBook(book8);
-            rental.TryAddBook(book9);
-            rental.TryAddBook(book10);
-            rental.TryAddBook(book11);
-            rental.TryAddBook(book12);
-
+            rental = new RentalController("server=localhost;port=3306;uid=root;pwd=root;database=Library", booksModel, rentalModel, readersModel, adminModel);
             while (true)
             {
                 PrintStartInfo();
@@ -77,7 +45,7 @@
         public static void PrintStartInfo()
         {
             Console.Clear();
-            List<string> commands = new List<string>() { "Rent", "Return", "Add*", "Remove*", "Get reader*", "Register"};
+            List<string> commands = new List<string>() { "Rent", "Return", "Add*", "Remove*", "Get reader*", "Register" };
             Console.BackgroundColor = menuBackColor;
             Console.ForegroundColor = menuFontColor;
             Console.WriteLine("|   Esc - quit   | Enter - choose| Up, Down arrows - navigate |");
@@ -271,7 +239,6 @@
 
                         }
 
-                        
                         Console.Clear();
                         Console.BackgroundColor = menuBackColor;
                         Console.ForegroundColor = menuFontColor;
@@ -285,8 +252,6 @@
                         Console.ResetColor();
                         Console.WriteLine(books.Count != 0 ? ">Available books: " : "No books available");
                         OptimisedListRender(chosenBookIndex, books);
-
-
                     }
 
                     book = books[chosenBookIndex];
@@ -308,7 +273,6 @@
                         Console.WriteLine("No such book available");
                     }
                 }
-
                 else
                 {
                     break;
@@ -426,8 +390,6 @@
 
                 }
 
-
-
                 bookid = books[chosenBookIndex].Id;
                 Console.Clear();
                 Console.BackgroundColor = titleBackColor;
@@ -445,7 +407,7 @@
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.WriteLine("----RETURN BOOK----");
                     Console.ResetColor();
-                    Console.WriteLine("\n"+ "No such book"+"\n" + "\n"+ "Press any key to proceed...");
+                    Console.WriteLine("\n" + "No such book" + "\n" + "\n" + "Press any key to proceed...");
                     while (true)
                     {
                         if (Console.ReadKey() != null)
@@ -476,12 +438,12 @@
         }
 
         public static void ProceedToAdd()
-        { 
+        {
             string username;
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("----ADD BOOK----"+"\n"+"\n"+ ">Type your username");
+                Console.WriteLine("----ADD BOOK----" + "\n" + "\n" + ">Type your username");
                 username = Console.ReadLine();
                 if (!username.Trim().Equals(string.Empty))
                 {
@@ -489,36 +451,28 @@
                 }
             }
 
-            Reader user = rental.TryPickUserByName(username);
-            if (user == null)
+            Admin admin = rental.TryPickAdminByUsername(username);
+            if (admin == null)
             {
-                NoUserCase();
+                NoAdminCase();
                 return;
             }
 
-            if (rental.CheckRights(user))
+            Console.Clear();
+            Console.WriteLine("----ADD BOOK----");
+            Console.WriteLine();
+            Console.WriteLine("Hi, Admin " + admin.Name + ", id: " + admin.Id + "\n" + ">Input book name: ");
+            string bookname = Console.ReadLine();
+            Console.WriteLine("OK, now input authors delimited by coma");
+            string astr = Console.ReadLine();
+            List<Author> authors = new List<Author>();
+            foreach (string str in astr.Split(","))
             {
-                Console.Clear();
-                Console.WriteLine("----ADD BOOK----");
-                Console.WriteLine();
-                Console.WriteLine("Hi, Admin " + user.Name + ", id: " + user.Id+"\n"+">Input book name: ");
-                string bookname = Console.ReadLine();
-                Console.WriteLine("OK, now input authors delimited by coma");
-                string astr = Console.ReadLine();
-                List<Author> authors = new List<Author>();
-                foreach (string str in astr.Split(","))
-                {
-                    authors.Add(new Author(Guid.NewGuid(), str));
-                }
-
-                Console.WriteLine(rental.TryAddBook(new Book(Guid.NewGuid(), bookname, authors)) ? "OK, added a new book" : "Book already exists");
-            }
-            else
-            {
-                Console.WriteLine("Admin rights required for this operation");
+                authors.Add(new Author(Guid.NewGuid(), str));
             }
 
-            Console.WriteLine("\n"+"Press any key to proceed to menu...");
+            Console.WriteLine(rental.TryAddBook(admin.CreateBook(Guid.NewGuid(), bookname, authors)) ? "OK, added a new book" : "Book already exists");
+            Console.WriteLine("\n" + "Press any key to proceed to menu...");
             while (true)
             {
                 if (Console.ReadKey() != null)
@@ -535,7 +489,7 @@
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("----REMOVE BOOK----"+"\n" + "\n"+ ">Type your username");
+                Console.WriteLine("----REMOVE BOOK----" + "\n" + "\n" + ">Type your username");
                 username = Console.ReadLine();
                 if (!username.Trim().Equals(string.Empty))
                 {
@@ -543,64 +497,56 @@
                 }
             }
 
-            Reader user = rental.TryPickUserByName(username);
-            if (user == null)
+            Admin admin = rental.TryPickAdminByUsername(username);
+            if (admin == null)
             {
-                NoUserCase();
+                NoAdminCase();
                 return;
             }
 
-            if (rental.CheckRights(user))
+            Console.Clear();
+            Console.WriteLine("----REMOVE BOOK----" + "\n" + "\n" + "Hi, Admin " + admin.Name + ", id: " + admin.Id);
+            IReadOnlyCollection<Book> books = rental.GetAllBooks();
+            Console.WriteLine(books.Count != 0 ? ">Available books: " : "No books available");
+            if (books.Count != 0)
             {
-
-                Console.Clear();
-                Console.WriteLine("----REMOVE BOOK----"+"\n" + "\n"+ "Hi, Admin " + user.Name + ", id: " + user.Id);
-                List<Book> books = rental.GetAllBooks();
-                Console.WriteLine(books.Count != 0 ? ">Available books: " : "No books available");
-                if (books.Count != 0)
+                foreach (Book b in books)
                 {
-                    foreach (Book b in books)
+                    string text = b.Name + ", by ";
+                    foreach (Author a in b.Authors)
                     {
-                        string text = b.Name + ", by ";
-                        foreach (Author a in b.Authors)
-                        {
 
-                            text += a.Name + ", ";
+                        text += a.Name + ", ";
 
-                        }
-
-                        text = text.Substring(0, text.Length - 2);
-                        text += "(id: " + b.Id + ")";
-                        Console.WriteLine(text);
                     }
 
-                    Console.WriteLine(">Input book id: ");
-                    Guid bookid = Guid.Parse(Console.ReadLine());
-                    Book book = rental.TryGetBookById(bookid);
-                    if (book == null)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("----RETURN BOOK----"+"\n" + "\n"+ "No such book" + "\n" + "\n" + "Press any key to proceed...");
-                        while (true)
-                        {
-                            if (Console.ReadKey() != null)
-                            {
-                                break;
-                            }
-                        }
-
-                        return;
-                    }
-
-                    Console.WriteLine(rental.TryRemoveBook(book) ? "OK, removed " + book.Name + "(id: " + book.Id + ")" : "Can't remove book");
+                    text = text.Substring(0, text.Length - 2);
+                    text += "(id: " + b.Id + ")";
+                    Console.WriteLine(text);
                 }
-            }
-            else
-            {
-                Console.WriteLine("Admin rights required for this operation");
+
+                Console.WriteLine(">Input book id: ");
+                Guid bookid = Guid.Parse(Console.ReadLine());
+                Book book = rental.TryGetBookById(bookid);
+                if (book == null)
+                {
+                    Console.Clear();
+                    Console.WriteLine("----RETURN BOOK----" + "\n" + "\n" + "No such book" + "\n" + "\n" + "Press any key to proceed...");
+                    while (true)
+                    {
+                        if (Console.ReadKey() != null)
+                        {
+                            break;
+                        }
+                    }
+
+                    return;
+                }
+
+                Console.WriteLine(rental.TryRemoveBook(book) ? "OK, removed " + book.Name + "(id: " + book.Id + ")" : "Can't remove book, already in use");
             }
 
-            Console.WriteLine("\n"+"Press any key to proceed to menu...");
+            Console.WriteLine("\n" + "Press any key to proceed to menu...");
             while (true)
             {
                 if (Console.ReadKey() != null)
@@ -617,7 +563,7 @@
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("----GET READER OF BOOK----"+"\n" + "\n"+ ">Type your username");
+                Console.WriteLine("----GET READER OF BOOK----" + "\n" + "\n" + ">Type your username");
                 username = Console.ReadLine();
                 if (!username.Trim().Equals(string.Empty))
                 {
@@ -625,54 +571,48 @@
                 }
             }
 
-            Reader user = rental.TryPickUserByName(username);
-            if (user == null)
+            Admin admin = rental.TryPickAdminByUsername(username);
+            if (admin == null)
             {
-                NoUserCase();
+                NoAdminCase();
                 return;
             }
 
-            if (rental.CheckRights(user))
+            Console.Clear();
+            Console.WriteLine("----GET READER OF BOOK----" + "\n" + "\n" + "Hi, Admin " + admin.Name + ", id: " + admin.Id);
+            Dictionary<Book, Reader> result = rental.GetRentBooks();
+            Console.WriteLine(result.Count != 0 ? "Rent books: " : "No rent books");
+            if (result.Count != 0)
             {
-                Console.Clear();
-                Console.WriteLine("----GET READER OF BOOK----"+"\n" + "\n"+ "Hi, Admin " + user.Name + ", id: " + user.Id);
-                Dictionary<Book, Reader> result = rental.GetRentBooks();
-                Console.WriteLine(result.Count != 0 ? "Rent books: " : "No rent books");
-                if (result.Count != 0)
+                foreach (Book book in result.Keys)
                 {
-                    foreach (Book book in result.Keys)
-                    {
-                        Console.WriteLine("Book: " + book.Name + "(id: " + book.Id + ") | Reader: " + result[book].Name + "(id: " + result[book].Id + ")");
-                    }
-
-                    Console.WriteLine("Type book id: ");
-                    Guid bookid = Guid.Parse(Console.ReadLine());
-                    Book b = rental.TryGetBookById(bookid);
-                    if (b == null)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("----RETURN BOOK----"+"\n" + "\n"+ "No such book" + "\n" + "\n" + "Press any key to proceed...");
-                        while (true)
-                        {
-                            if (Console.ReadKey() != null)
-                            {
-                                break;
-                            }
-                        }
-
-                        return;
-                    }
-
-                    Reader reader = rental.TryGetReader(b);
-                    Console.WriteLine("_________"+"\n"+ "Reader of " + b.Name + "(id: " + b.Id + ") is " + reader.Name + "(id: " + reader.Id + ")");
+                    Console.WriteLine("Book: " + book.Name + "(id: " + book.Id + ") | Reader: " + result[book].Name + "(id: " + result[book].Id + ")");
                 }
-            }
-            else
-            {
-                Console.WriteLine("Admin rights required for this operation");
+
+                Console.WriteLine("Type book id: ");
+                Guid bookid = Guid.Parse(Console.ReadLine());
+                Book b = rental.TryGetBookById(bookid);
+                if (b == null)
+                {
+                    Console.Clear();
+                    Console.WriteLine("----RETURN BOOK----" + "\n" + "\n" + "No such book" + "\n" + "\n" + "Press any key to proceed...");
+                    while (true)
+                    {
+                        if (Console.ReadKey() != null)
+                        {
+                            break;
+                        }
+                    }
+
+                    return;
+                }
+
+                Reader reader = rental.TryGetReader(b);
+                Console.WriteLine("_________" + "\n" + "Reader of " + b.Name + "(id: " + b.Id + ") is " + reader.Name + "(id: " + reader.Id + ")");
             }
 
-            Console.WriteLine("\n"+"Press any key to proceed to menu...");
+
+            Console.WriteLine("\n" + "Press any key to proceed to menu...");
             while (true)
             {
                 if (Console.ReadKey() != null)
@@ -685,7 +625,7 @@
         public static void ProceedToRegister()
         {
             Console.Clear();
-            Console.WriteLine("----REGISTER----"+"\n" + "\n"+ "Type username: ");
+            Console.WriteLine("----REGISTER----" + "\n" + "\n" + "Type username: ");
             string username = Console.ReadLine();
             Console.Clear();
             Console.WriteLine("----REGISTER----" + "\n");
@@ -697,7 +637,7 @@
             }
             Console.WriteLine(result ? "Successfully registered" : "Problem registering, maybe user exists");
 
-            Console.WriteLine("\n"+"Press any key to proceed to menu...");
+            Console.WriteLine("\n" + "Press any key to proceed to menu...");
             while (true)
             {
                 if (Console.ReadKey() != null)
@@ -761,20 +701,24 @@
                     {
                         selectedIndex--;
                     }
-                }else if (key == ConsoleKey.DownArrow)
+                }
+                else if (key == ConsoleKey.DownArrow)
                 {
                     if (selectedIndex < foundBooks.Count - 1)
                     {
                         selectedIndex++;
                     }
-                }else if (key == ConsoleKey.Enter)
+                }
+                else if (key == ConsoleKey.Enter)
                 {
 
                     break;
-                }else if (key == ConsoleKey.Escape)
+                }
+                else if (key == ConsoleKey.Escape)
                 {
                     return false;
-                }else if (key == ConsoleKey.Backspace)
+                }
+                else if (key == ConsoleKey.Backspace)
                 {
                     selectedIndex = 0;
                     if (!string.IsNullOrEmpty(input))
@@ -826,10 +770,10 @@
                 Console.WriteLine("|                         FIND BOOK                           |");
                 Console.BackgroundColor = infoBackColor;
                 Console.ForegroundColor = infoFontColor;
-                Console.WriteLine(">User: " + user.Name+"\n"+ ">Book: " + res.Name);
+                Console.WriteLine(">User: " + user.Name + "\n" + ">Book: " + res.Name);
                 Console.ResetColor();
                 Console.WriteLine(rental.TryRentBook(res, user) ? "Rented successfully" : "Error, coludn't rent");
-                Console.WriteLine("\n"+"Press any key to proceed...");
+                Console.WriteLine("\n" + "Press any key to proceed...");
                 while (true)
                 {
                     if (Console.ReadKey() != null)
@@ -850,7 +794,20 @@
         private static void NoUserCase()
         {
             Console.Clear();
-            Console.WriteLine("No such user, please register"+"\n" + "\n" + "Press any key to proceed to menu...");
+            Console.WriteLine("No such user, please register" + "\n" + "\n" + "Press any key to proceed to menu...");
+            while (true)
+            {
+                if (Console.ReadKey() != null)
+                {
+                    break;
+                }
+            }
+        }
+
+        private static void NoAdminCase()
+        {
+            Console.Clear();
+            Console.WriteLine("No such admin found with this username, please check input" + "\n" + "\n" + "Press any key to proceed to menu...");
             while (true)
             {
                 if (Console.ReadKey() != null)

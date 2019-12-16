@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using Library.Domain;
+using MySql.Data.MySqlClient;
 
 namespace Library.Managers
 {
     public class ReaderManager
     {
-        private Dictionary<Guid, Reader> _readers = new Dictionary<Guid, Reader>();
+        public MySqlConnection Connection { get; set; }
 
         public ReaderManager()
         {
@@ -16,68 +17,74 @@ namespace Library.Managers
 
         public bool ReaderExists(Reader reader)
         {
-            return _readers.ContainsKey(reader.Id);
+            MySqlCommand com = new MySqlCommand("SELECT * FROM Readers WHERE username=@name", Connection);
+            com.Parameters.AddWithValue("@name", reader.Name);
+            MySqlDataReader rdr = com.ExecuteReader();
+            bool ready = rdr.HasRows;
+            rdr.Close();
+            return ready;
         }
 
         public List<Reader> TryGetAll()
         {
-
-            List<Reader> result = new List<Reader>();
-            foreach (Reader reader in _readers.Values)
+            List<Reader> res = new List<Reader>();
+            MySqlCommand com = new MySqlCommand("SELECT * FROM Readers", Connection);
+            MySqlDataReader rdr = com.ExecuteReader();
+            while (rdr.Read())
             {
-                result.Add(new Reader(reader.Id, reader.Name));
+                res.Add(new Reader(Guid.Parse(rdr.GetString(0)), rdr.GetString(1)));
             }
-            return result;
+            rdr.Close();
+            return res;
         }
 
         public Reader TryPickByName(string name)
         {
-            foreach (Reader reader in _readers.Values)
+            Reader result = null;
+            MySqlCommand com = new MySqlCommand("SELECT * FROM Readers WHERE username=@name", Connection);
+            com.Parameters.AddWithValue("@name", name);
+            MySqlDataReader rdr = com.ExecuteReader();
+            bool ready = rdr.HasRows;
+            while (rdr.Read())
             {
-                if (reader.Name.Equals(name))
-                {
-                    return reader;
-                }
+                result = new Reader(new Guid(rdr.GetString(0)), rdr.GetString(1));
             }
-            return null;
+            rdr.Close();
+            return ready ? result : null;
         }
 
         public bool TryAdd(Reader reader)
         {
-            if (_readers.ContainsKey(reader.Id))
-            {
-                return false;
-            }
-            foreach (Reader r in _readers.Values)
-            {
-                if (r.Name.ToLower().Equals(reader.Name.ToLower()))
-                {
-                    return false;
-                }
-            }
-            long startCount = _readers.Count;
-            _readers.Add(reader.Id, reader);
-            return startCount != _readers.Count;
+            MySqlCommand com = new MySqlCommand("INSERT INTO Readers VALUES(@id, @username)", Connection);
+            com.Parameters.AddWithValue("@id", reader.Id.ToString());
+            com.Parameters.AddWithValue("@username", reader.Name);
+            int updated = com.ExecuteNonQuery();
+            return updated > 0 ? true : false;
         }
 
         public bool TryRemove(Guid readerid)
         {
-            long startCount = _readers.Count;
-            if (!_readers.ContainsKey(readerid))
-            {
-                return false;
-            }
-            _readers.Remove(readerid);
-            return startCount - _readers.Count == 1;
+            MySqlCommand com = new MySqlCommand("DELETE FROM Readers WHERE id=@id", Connection);
+            com.Parameters.AddWithValue("@id", readerid.ToString());
+            int updated = com.ExecuteNonQuery();
+            return updated > 0 ? true : false;
         }
 
         public Reader TryGet(Guid id)
         {
-            if (!_readers.ContainsKey(id))
+            bool ready = false;
+            Reader result = null;
+            MySqlCommand com = new MySqlCommand("SELECT * FROM Readers WHERE id=@id", Connection);
+            com.Parameters.AddWithValue("@id", id.ToString());
+            using (MySqlDataReader rdr = com.ExecuteReader())
             {
-                return null;
+                ready = rdr.HasRows;
+                while (rdr.Read())
+                {
+                    result = new Reader(new Guid(rdr.GetString(0)), rdr.GetString(1));
+                }
             }
-            return _readers[id];
+            return ready ? result : null;
         }
     }
 }

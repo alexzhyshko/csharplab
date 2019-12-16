@@ -8,23 +8,43 @@ namespace Library.Application
     using System.Text;
     using Library.Domain;
     using Library.Managers;
+    using MySql.Data.MySqlClient;
 
     public class RentalController
     {
+        private MySqlConnection _connection;
         private BookManager _books;
         private RentalManager _rental;
         private ReaderManager _readers;
         private AdminManager _admins;
 
-        public RentalController(BookManager books, RentalManager rental, ReaderManager readers, AdminManager admins)
+        public RentalController(String connStr, BookManager books, RentalManager rental, ReaderManager readers, AdminManager admins)
         {
+            _connection = new MySqlConnection(connStr);
+            _connection.Open();
+
+            books.Connection = _connection;
+            rental.Connection = _connection;
+            readers.Connection = _connection;
+            admins.Connection = _connection;
+
+
             _books = books;
             _rental = rental;
             _readers = readers;
             _admins = admins;
         }
 
+        public Admin TryPickAdminByUsername(string username)
+        {
+            return _admins.GetByName(username);
+        }
 
+
+        public List<Admin> GetAllAdmins()
+        {
+            return _admins.TryGetAll();
+        }
         public bool TryAddAdmin(Admin admin)
         {
             return _admins.TryAdd(admin) && _readers.TryAdd(admin);
@@ -53,16 +73,6 @@ namespace Library.Application
 
         public bool TryRentBook(Book book, Reader reader)
         {
-            if (!CheckParams(book, reader))
-            {
-                return false;
-            }
-
-            if (RentalManager.GetBookRentStatus(book.Id))
-            {
-                return false;
-            }
-
             return _rental.TryUpdate(book.Id, reader.Id);
 
         }
@@ -72,12 +82,8 @@ namespace Library.Application
 
 
 
-            if (!CheckParams(book, reader))
-            {
-                return false;
-            }
 
-            if (!RentalManager.GetBookRentStatus(book.Id))
+            if (!_rental.GetBookRentStatus(book.Id))
             {
                 return false;
             }
@@ -101,13 +107,7 @@ namespace Library.Application
 
         public bool TryRemoveBook(Book book)
         {
-
-            if (!RentalManager.GetBookRentStatus(book.Id))
-            {
-                return _books.TryRemove(book.Id) && _rental.TryRemove(book.Id);
-            }
-            return false;
-            
+            return _books.TryRemove(book.Id);
         }
 
         public bool TryAddBook(Book book)
@@ -118,19 +118,10 @@ namespace Library.Application
 
         public List<Book> GetAllNonBookedBooks()
         {
-            List<Book> res = new List<Book>();
-            List<Book> temp = _books.TryGetAll();
-            foreach (Book book in temp)
-            {
-                if (!RentalManager.GetBookRentStatus(book.Id))
-                {
-                    res.Add(book);
-                }
-            }
-            return res;
+            return _books.GetNonRentBooks();
         }
 
-        public List<Book> GetAllBooks()
+        public IReadOnlyCollection<Book> GetAllBooks()
         {
             return _books.TryGetAll();
         }
@@ -187,7 +178,7 @@ namespace Library.Application
             List<Book> res = new List<Book>();
             foreach (Book book in books)
             {
-                if (!RentalManager.GetBookRentStatus(book.Id))
+                if (!_rental.GetBookRentStatus(book.Id))
                 {
                     res.Add(book);
                 }

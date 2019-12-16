@@ -1,61 +1,78 @@
 ﻿using System;
 using System.Collections.Generic;
 using Library.Domain;
+using MySql.Data.MySqlClient;
 
 namespace Library.Managers
 {
     public class AdminManager
     {
-        private List<Admin> _admins = new List<Admin>();
-
         public AdminManager()
         {
             
         }
 
+        public MySqlConnection Connection { get; set; }
 
         public List<Admin> TryGetAll()
         {
             List<Admin> res = new List<Admin>();
-            foreach (Admin adm in _admins)
+            MySqlCommand com = new MySqlCommand("SELECT * FROM Admins", Connection);
+            using (MySqlDataReader rdr = com.ExecuteReader())
             {
-                res.Add(new Admin(adm.Id, adm.Name));
+                while (rdr.Read())
+                {
+                    res.Add(new Admin(Guid.Parse(rdr.GetString(0)), rdr.GetString(1)));
+                }
             }
             return res;
 
         }
 
+        public Admin GetByName(string username)
+        {
+            Admin result = null;
+            MySqlCommand com = new MySqlCommand("SELECT * FROM Admins WHERE username=@name", Connection);
+            com.Parameters.AddWithValue("@name", username);
+            bool ready = false;
+            using (MySqlDataReader rdr = com.ExecuteReader())
+            {
+                ready = rdr.HasRows;
+                while (rdr.Read())
+                {
+                    result = new Admin(new Guid(rdr.GetString(0)), rdr.GetString(1));
+                }
+            }
+            return ready?result:null;
+        }
 
         public bool TryAdd(Admin newAdmin)
         {
-            if (!_admins.Contains(newAdmin))
-            {
-                _admins.Add(newAdmin);
-                return true;
-            }
-            return false;
+            MySqlCommand com = new MySqlCommand("INSERT INTO Admins VALUES(@id, @username)", Connection);
+            com.Parameters.AddWithValue("@id", newAdmin.Id.ToString());
+            com.Parameters.AddWithValue("@username", newAdmin.Name);
+            int updated = com.ExecuteNonQuery();
+            return updated > 0 ? true : false;
         }
 
         public bool TryRemove(Admin admin)
         {
-            if (_admins.Contains(admin))
-            {
-                _admins.Remove(admin);
-                return true;
-            }
-            return false;
+            MySqlCommand com = new MySqlCommand("DELETE FROM Admins WHERE id=@id", Connection);
+            com.Parameters.AddWithValue("@id", admin.Id.ToString());
+            int updated = com.ExecuteNonQuery();
+            return updated > 0 ? true : false;
         }
 
         public bool CheckRights(Reader reader)
         {
-            foreach (Admin admin in _admins)
+            MySqlCommand com = new MySqlCommand("SELECT * FROM Admins WHERE username=@name", Connection);
+            com.Parameters.AddWithValue("@name", reader.Name);
+            bool ready = false;
+            using (MySqlDataReader rdr = com.ExecuteReader())
             {
-                if (admin.Id.Equals(reader.Id))
-                {
-                    return true;
-                }
+                ready = rdr.HasRows;
             }
-            return false;
+            return ready;
         }
 
     }
