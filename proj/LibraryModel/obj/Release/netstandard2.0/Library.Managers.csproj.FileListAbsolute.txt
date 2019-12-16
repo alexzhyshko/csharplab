@@ -9,3 +9,8 @@ C:\Users\sanja\source\repos\Library.Domain\LibraryModel\obj\Release\netstandard2
 C:\Users\sanja\source\repos\Library.Domain\LibraryModel\obj\Release\netstandard2.0\Library.Managers.csproj.CopyComplete
 C:\Users\sanja\source\repos\Library.Domain\LibraryModel\obj\Release\netstandard2.0\Library.Managers.dll
 C:\Users\sanja\source\repos\Library.Domain\LibraryModel\obj\Release\netstandard2.0\Library.Managers.pdb
+C:\Users\sanja\source\repos\Library.Domain\LibraryModel\bin\Release\netstandard2.0\MySql.Data.dll
+C:\Users\sanja\source\repos\Library.Domain\LibraryModel\bin\Release\netstandard2.0\Google.Protobuf.dll
+C:\Users\sanja\source\repos\Library.Domain\LibraryModel\bin\Release\netstandard2.0\BouncyCastle.Crypto.dll
+C:\Users\sanja\source\repos\Library.Domain\LibraryModel\bin\Release\netstandard2.0\Renci.SshNet.dll
+C:\Users\sanja\source\repos\Library.Domain\LibraryModel\bin\Release\netstandard2.0\MySql.Data.xml

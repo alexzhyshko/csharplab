@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using Library.Domain;
-
-
+using MySql.Data.MySqlClient;
 
 namespace Library.Managers
 {
     public class RentalManager
     {
-        
-        private static Dictionary<Guid, Guid> _rental = new Dictionary<Guid, Guid>();
-       
+
+        public MySqlConnection Connection { get; set; }
+
 
         public RentalManager()
         {
@@ -20,14 +19,30 @@ namespace Library.Managers
 
         public bool BookExists(Book book)
         {
-            return _rental.ContainsKey(book.Id);
+            MySqlCommand com = new MySqlCommand("SELECT * FROM Rental WHERE bookid=@id", Connection);
+            com.Parameters.AddWithValue("@id", book.Id);
+            using (MySqlDataReader rdr = com.ExecuteReader())
+            {
+                return rdr.HasRows;
+            }
+
         }
 
 
         //true for rent, false for free
-        public static bool GetBookRentStatus(Guid bookid)
+        public bool GetBookRentStatus(Guid bookid)
         {
-            return _rental[bookid] != Guid.Empty;
+            bool free = false;
+            MySqlCommand com = new MySqlCommand("SELECT readerid FROM Rental WHERE bookid=@id", Connection);
+            com.Parameters.AddWithValue("@id", bookid.ToString());
+            using (MySqlDataReader rdr = com.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    free = Guid.Parse(rdr.GetString("readerid")).Equals(Guid.Empty);
+                }
+            }
+            return !free;
         }
 
         
@@ -35,58 +50,61 @@ namespace Library.Managers
         //adds a new book without rental
         public bool TryAdd(Guid bookid)
         {
-            if (_rental.ContainsKey(bookid))
-            {
-                return false;
-            }
-            long startSize = _rental.Count;
-            _rental.Add(bookid, Guid.Empty);
-            return startSize != _rental.Count;  
+            MySqlCommand com = new MySqlCommand("INSERT INTO Rental VALUES(@bookid, @readerid)", Connection);
+            com.Parameters.AddWithValue("@bookid", bookid.ToString());
+            com.Parameters.AddWithValue("@readerid", Guid.Empty.ToString());
+            int updated = com.ExecuteNonQuery();
+            return updated > 0 ? true : false;
         }
 
         public bool TryRemove(Guid bookid)
         {
-            long startSize = _rental.Count;
-            if (!_rental.ContainsKey(bookid))
-            {
-                return false;
-            }
-            _rental.Remove(bookid);
-            return startSize - _rental.Count==1;
+            MySqlCommand com = new MySqlCommand("DELETE FROM Rental WHERE bookid=@id", Connection);
+            com.Parameters.AddWithValue("@id", bookid.ToString());
+            int updated = com.ExecuteNonQuery();
+            return updated > 0 ? true : false;
         }
 
         public bool TryUpdate(Guid bookid, Guid readerid)
         {
-            Guid startVal = _rental[bookid];
-            if (!_rental.ContainsKey(bookid))
-            {
-                return false;
-            }
-
-            _rental[bookid] = readerid;
-            return _rental[bookid] != startVal;
+            MySqlCommand com = new MySqlCommand("UPDATE Rental SET readerid=@readerid WHERE bookid=@bookid", Connection);
+            com.Parameters.AddWithValue("@bookid", bookid.ToString());
+            com.Parameters.AddWithValue("@readerid", readerid.ToString());
+            int updated = com.ExecuteNonQuery();
+            return updated > 0 ? true : false;
         }
 
         public OptionalGuid TryGet(Guid bookid)
         {
-            return new OptionalGuid()
+            OptionalGuid result = null;
+            MySqlCommand com = new MySqlCommand("SELECT readerid FROM Rental WHERE bookid=@id", Connection);
+            com.Parameters.AddWithValue("@id", bookid.ToString());
+            using (MySqlDataReader rdr = com.ExecuteReader())
             {
-                Id = _rental[bookid],
-                ContainsResult = _rental.ContainsKey(bookid)
-            };
+                while (rdr.Read())
+                {
+                    result = new OptionalGuid()
+                    {
+                        Id = Guid.Parse(rdr.GetString("readerid")),
+                        ContainsResult = rdr.HasRows
+                    };
+                }
+            }
+            return result;
+
         }
 
 
         public List<Guid> GetUserBooks(Reader reader)
         {
             List<Guid> res = new List<Guid>();
-
-            foreach (Guid guid in _rental.Keys)
+            MySqlCommand com = new MySqlCommand("SELECT bookid FROM Rental WHERE readerid=@readerid", Connection);
+            com.Parameters.AddWithValue("@readerid", reader.Id.ToString());
+            using (MySqlDataReader rdr = com.ExecuteReader())
             {
-                if (_rental[guid].Equals(reader.Id))
+                while (rdr.Read())
                 {
-                    res.Add(guid);
-
+                    res.Add(Guid.Parse(rdr.GetString("bookid")));
                 }
             }
             return res;
@@ -95,24 +113,36 @@ namespace Library.Managers
         public Dictionary<Guid, Guid> GetRentBooks()
         {
             Dictionary <Guid, Guid> res= new Dictionary<Guid, Guid>();
-            foreach (Guid Id in _rental.Keys)
+
+            MySqlCommand com = new MySqlCommand("SELECT * FROM Rental WHERE readerid!=@readerid", Connection);
+            com.Parameters.AddWithValue("@readerid", Guid.Empty.ToString());
+            using (MySqlDataReader rdr = com.ExecuteReader())
             {
-                if (!_rental[Id].Equals(Guid.Empty))
+
+                while (rdr.Read())
                 {
-                    res.Add(Id, _rental[Id]);
+                    res.Add(Guid.Parse(rdr.GetString("bookid")), Guid.Parse(rdr.GetString("readerid")));
 
                 }
             }
             return res;
         }
 
+        
+
 
         public Dictionary<Guid, Guid> TryGetAll()
         {
             Dictionary<Guid, Guid> res = new Dictionary<Guid, Guid>();
-            foreach (Guid key in _rental.Keys)
+            MySqlCommand com = new MySqlCommand("SELECT * FROM Rental", Connection);
+            using (MySqlDataReader rdr = com.ExecuteReader())
             {
-                res.Add(key, _rental[key]);
+
+                while (rdr.Read())
+                {
+                    res.Add(Guid.Parse(rdr.GetString("bookid")), Guid.Parse(rdr.GetString("readerid")));
+
+                }
             }
             return res;
         }

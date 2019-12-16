@@ -10,5 +10,10 @@ namespace Library.Domain
             : base(id, name)
         {
         }
+
+        public Book CreateBook(Guid identificator, string name, List<Author> authors)
+        {
+            return new Book(identificator, name, authors);
+        }
     }
 }

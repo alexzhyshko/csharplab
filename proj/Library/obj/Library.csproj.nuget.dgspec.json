@@ -247,6 +247,18 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[1.1.118, )"
+            },
+            "System.Configuration.ConfigurationManager": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
+            "System.Management": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
+            "System.Security.Permissions": {
+              "target": "Package",
+              "version": "[4.7.0, )"
             }
           },
           "imports": [
